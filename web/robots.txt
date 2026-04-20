@@ -1,0 +1,12 @@
+# KestFord — robots.txt
+# https://kestford.com
+
+User-agent: *
+Allow: /
+
+# Disallow internal folders
+Disallow: /config/
+Disallow: /backend/
+
+# Primary sitemap for main domain and referenced subdomains
+Sitemap: https://kestford.com/sitemap.xml
