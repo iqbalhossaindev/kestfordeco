@@ -2,8 +2,12 @@
   "name": "kestford-share",
   "version": "3.0.0",
   "private": true,
-  "description": "KestFord Share with Vercel serverless signaling, nearby discovery, and direct browser to browser transfer.",
+  "description": "KestFord Share for Railway with an Express server and static frontend.",
   "scripts": {
-    "test": "node tests/endpoints.test.js && node tests/syntax-check.js"
+    "test": "node tests/endpoints.test.js && node tests/syntax-check.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }

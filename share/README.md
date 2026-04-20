@@ -1,37 +1,30 @@
-# KestFord Share v3
+# KestFord Share for Railway
 
-This build includes:
+This package is adjusted to run on Railway.
 
-1. Real Vercel serverless signaling routes
-2. Direct WebRTC data channel file transfer
-3. Nearby sender discovery for users on the same network hash
-4. Upstash Redis support for reliable shared state on Vercel
-5. TURN environment variable support for harder NAT cases
-6. Clipboard copy and paste helpers
-7. Reset flows for sender and receiver
+## What changed
 
-## Required for production
+1. Added an Express server in `server.js`
+2. Added a `start` script in `package.json`
+3. Serves the static site and mounts the Node API routes that already exist in this project
 
-Set Upstash Redis environment variables in Vercel:
+## Railway deploy
 
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
+1. Push this `share` folder to GitHub
+2. Create a new Railway service from that repo
+3. Set the service root directory to `/share` if this folder is inside a monorepo
+4. Railway should detect `npm start`
+5. After deploy, generate a public domain
+6. Add your custom domain `share.kestford.com`
 
-Optional TURN variables:
+## Important note
+
+The frontend file `js/app.js` in the provided project is empty, so the page can load but the interactive browser transfer flow will not work until that client logic is restored.
+
+## Optional variables
+
+You may still use TURN variables if your client code expects them:
 
 - `TURN_URL`
 - `TURN_USERNAME`
 - `TURN_CREDENTIAL`
-
-## Notes
-
-- Nearby discovery works through the backend by grouping users on the same network hash. It is browser safe and works better than local memory mode, but it is not raw LAN multicast discovery.
-- Without TURN, some strict mobile or enterprise networks may still fail to establish a peer connection.
-- Without Upstash Redis, memory mode is only suitable for local testing.
-
-## Deploy
-
-1. Push the `share` folder to GitHub
-2. Import the project into Vercel
-3. Add the environment variables
-4. Redeploy
