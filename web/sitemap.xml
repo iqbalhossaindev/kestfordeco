@@ -30,14 +30,14 @@
   </url>
 
   <url>
-    <loc>https://kestford.com/pdf</loc>
+    <loc>https://pdf.kestford.com</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://kestford.com/pdf/app</loc>
+    <loc>https://pdf.kestford.com/app</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
