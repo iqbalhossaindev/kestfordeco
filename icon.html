@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KestFord Icons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --label-color: rgba(255,255,255,0.96);
+      --label-muted: rgba(255,255,255,0.72);
+      --label-shadow: 0 2px 14px rgba(0,0,0,0.55);
+      --ring: rgba(255,255,255,0.16);
+      --glass: rgba(255,255,255,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: manipulation;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.04), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.03), transparent 35%);
+      opacity: .8;
+    }
+
+    .icon-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-content: start;
+      padding: 12px 8px;
+      gap: 2px 0;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px 6px 18px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      position: relative;
+      opacity: 0;
+      animation: popIn .55s cubic-bezier(.22,1,.36,1) forwards;
+    }
+
+    .app:nth-child(1) { animation-delay: .04s; }
+    .app:nth-child(2) { animation-delay: .10s; }
+    .app:nth-child(3) { animation-delay: .16s; }
+    .app:nth-child(4) { animation-delay: .22s; }
+    .app:nth-child(5) { animation-delay: .28s; }
+    .app:nth-child(6) { animation-delay: .34s; }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow:
+        0 18px 30px rgba(0,0,0,0.34),
+        0 6px 14px rgba(0,0,0,0.26),
+        inset 0 1px 0 rgba(255,255,255,0.26),
+        inset 0 -8px 16px rgba(0,0,0,0.18);
+      transition:
+        transform .22s cubic-bezier(.22,1,.36,1),
+        box-shadow .22s ease,
+        border-color .22s ease,
+        filter .22s ease;
+      will-change: transform;
+      isolation: isolate;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .icon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.06) 34%, transparent 58%),
+        radial-gradient(circle at 25% 18%, rgba(255,255,255,0.22), transparent 34%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .icon::after {
+      content: '';
+      position: absolute;
+      left: -55%;
+      top: -10%;
+      width: 46%;
+      height: 130%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+      transform: skewX(-18deg);
+      transition: left .6s ease;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .icon-ring {
+      position: absolute;
+      inset: 1px;
+      border-radius: 17px;
+      border: 1px solid rgba(255,255,255,0.10);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .icon-glow {
+      position: absolute;
+      inset: auto 10px -16px 10px;
+      height: 16px;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: .34;
+      transform: translateY(2px);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .app:hover .icon,
+    .app:focus-visible .icon {
+      transform: translateY(-7px) scale(1.08);
+      border-color: rgba(255,255,255,0.24);
+      box-shadow:
+        0 24px 42px rgba(0,0,0,0.42),
+        0 8px 18px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.32),
+        inset 0 -8px 16px rgba(0,0,0,0.12);
+      filter: saturate(1.05) brightness(1.04);
+    }
+
+    .app:hover .icon::after,
+    .app:focus-visible .icon::after {
+      left: 125%;
+    }
+
+    .app:hover .icon-glow,
+    .app:focus-visible .icon-glow {
+      opacity: .52;
+      transform: translateY(0);
+    }
+
+    .app:active .icon {
+      transform: translateY(-1px) scale(.96);
+      transition-duration: .12s;
+    }
+
+    .icon svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px;
+      height: 32px;
+      z-index: 3;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+    }
+
+    .label {
+      margin-top: 9px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.28;
+      color: var(--label-color);
+      text-align: center;
+      text-shadow: var(--label-shadow);
+      max-width: 78px;
+    }
+
+    .label small {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--label-muted);
+      letter-spacing: -0.01em;
+      margin-top: 1px;
+    }
+
+    .g-download {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
+        linear-gradient(160deg, #3db8ff 0%, #0f7dff 46%, #003eb7 100%);
+    }
+    .g-download + .icon-glow { background: rgba(33,128,255,0.65); }
+
+    .g-pdf {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
+        linear-gradient(160deg, #ff7b6e 0%, #f23c4e 46%, #8f001b 100%);
+    }
+    .g-pdf + .icon-glow { background: rgba(233,54,89,0.68); }
+
+    .g-browser {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.20), transparent 30%),
+        linear-gradient(160deg, #5be6a0 0%, #11b56b 44%, #066038 100%);
+    }
+    .g-browser + .icon-glow { background: rgba(24,187,109,0.62); }
+
+    .g-tv {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
+        linear-gradient(160deg, #9b83ff 0%, #6b49ff 46%, #28118f 100%);
+    }
+    .g-tv + .icon-glow { background: rgba(105,73,255,0.64); }
+
+    .g-news-en {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
+        linear-gradient(160deg, #ffc15d 0%, #ff8d28 46%, #b74700 100%);
+    }
+    .g-news-en + .icon-glow { background: rgba(255,137,41,0.64); }
+
+    .g-news-bd {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
+        linear-gradient(160deg, #ff6a91 0%, #db225a 46%, #6d0028 100%);
+    }
+    .g-news-bd + .icon-glow { background: rgba(219,34,90,0.65); }
+
+    .ripple-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.28);
+      transform: scale(0);
+      animation: rippleFade .55s ease-out forwards;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes rippleFade {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(16px) scale(.88); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    #launch-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #launch-overlay.on { display: flex; }
+
+    #launch-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      box-shadow: 0 0 45px rgba(255,255,255,0.12);
+      animation: expand .42s cubic-bezier(.22,.61,.36,1) forwards;
+    }
+
+    @keyframes expand {
+      0%   { transform: scale(1); opacity: .92; }
+      70%  { transform: scale(12); opacity: .55; border-radius: 0; }
+      100% { transform: scale(35); opacity: 0; border-radius: 0; }
+    }
+
+
+    .app-info {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% - 6px);
+      transform: translateX(-50%) translateY(10px) scale(.96);
+      width: min(210px, 72vw);
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(10,14,24,0.86);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 18px 42px rgba(0,0,0,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px) saturate(1.25);
+      -webkit-backdrop-filter: blur(16px) saturate(1.25);
+      text-align: left;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+      z-index: 20;
+    }
+
+    .app-info::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -7px;
+      width: 12px;
+      height: 12px;
+      margin-left: -6px;
+      transform: rotate(45deg);
+      background: rgba(10,14,24,0.92);
+      border-right: 1px solid rgba(255,255,255,0.10);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .app.show-info .app-info {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .app-info-title {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.96);
+      letter-spacing: -0.01em;
+    }
+
+    .app-info-text {
+      display: block;
+      margin-top: 5px;
+      font-size: 11px;
+      line-height: 1.38;
+      color: rgba(255,255,255,0.74);
+    }
+
+    @media (min-width: 601px) {
+      .icon-grid {
+        width: max-content;
+        min-width: 100%;
+        grid-template-columns: none;
+        grid-template-rows: repeat(3, minmax(132px, auto));
+        grid-auto-flow: column;
+        grid-auto-columns: 112px;
+        justify-content: start;
+        align-content: start;
+        padding: 20px 18px 24px;
+        gap: 8px 10px;
+      }
+
+      .app {
+        padding: 14px 8px 18px;
+        align-items: center;
+      }
+
+      .icon {
+        width: 78px;
+        height: 78px;
+        border-radius: 22px;
+      }
+
+      .icon-ring {
+        border-radius: 21px;
+      }
+
+      .icon svg {
+        width: 38px;
+        height: 38px;
+      }
+
+      .label {
+        margin-top: 10px;
+        font-size: 12px;
+        max-width: 92px;
+      }
+
+      .label small {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="icon-grid">
+
+    <div class="app" data-url="https://download.kestford.com/">
+      <div class="icon g-download">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3v11m0 0-4-4m4 4 4-4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="4" y="17" width="16" height="2.5" rx="1.25" fill="white" opacity=".85"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Video Downloader</span>
+    </div>
+
+    <div class="app" data-url="https://www.kestford.com/pdf/">
+      <div class="icon g-pdf">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="2" width="10" height="13" rx="1.5" fill="rgba(255,255,255,0.20)"/>
+          <path d="M5 2h8l4 4v14a1 1 0 01-1 1H6a1 1 0 01-1-1V2z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M13 2v5h4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 13h8M8 16.5h5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <text x="7.5" y="12" font-size="4.5" fill="white" font-weight="700" font-family="Arial">PDF</text>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">PDF Editor</span>
+    </div>
+
+    <div class="app" data-url="https://www.kestford.com" data-info-title="KestFord Main Site" data-info-text="Visit the main KestFord website to explore updates, services, and more.">
+      <div class="icon g-browser">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
+          <path d="M12 3c-2.4 2.7-3.8 5.7-3.8 9s1.4 6.3 3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M12 3c2.4 2.7 3.8 5.7 3.8 9s-1.4 6.3-3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="3" y1="9" x2="21" y2="9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="3" y1="15" x2="21" y2="15" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">KestFord<small>Main Site</small></span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">KestFord Main Site</span>
+        <span class="app-info-text">Visit the main KestFord website to explore updates, services, and more.</span>
+      </div>
+    </div>
+
+    <div class="app" data-url="https://watch.kestford.com">
+      <div class="icon g-tv">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="2.5" y="6.5" width="19" height="13" rx="2.2" fill="rgba(255,255,255,0.14)" stroke="white" stroke-width="1.8"/>
+          <path d="M8 6.5 12 3l4 3.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="9" y="19.5" width="6" height="1.5" rx="0.75" fill="white" opacity=".6"/>
+          <path d="M10 10.5l5 3-5 3V10.5z" fill="white" opacity=".94"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">TV</span>
+    </div>
+
+    <div class="app" data-url="https://www.truthorrumor.com/">
+      <div class="icon g-news-en">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="4" width="18" height="16" rx="2" fill="rgba(255,255,255,0.12)" stroke="white" stroke-width="1.7"/>
+          <rect x="6" y="7.5" width="5" height="5" rx="0.8" fill="white" opacity=".82"/>
+          <line x1="13" y1="8.5" x2="18" y2="8.5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="13" y1="11" x2="18" y2="11" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="6" y1="15" x2="18" y2="15" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity=".6"/>
+          <line x1="6" y1="17.5" x2="14" y2="17.5" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">News<small>English</small></span>
+    </div>
+
+    <div class="app" data-url="https://www.truthorrumor.com/bd">
+      <div class="icon g-news-bd">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="4" width="18" height="16" rx="2" fill="rgba(255,255,255,0.12)" stroke="white" stroke-width="1.7"/>
+          <rect x="6" y="7.5" width="5" height="5" rx="0.8" fill="white" opacity=".82"/>
+          <line x1="13" y1="8.5" x2="18" y2="8.5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="13" y1="11" x2="18" y2="11" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="6" y1="15" x2="18" y2="15" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity=".6"/>
+          <line x1="6" y1="17.5" x2="14" y2="17.5" stroke="white" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>
+          <circle cx="8.5" cy="10" r="1.6" fill="#006a4e"/>
+          <circle cx="8.5" cy="10" r="1" fill="#f42a41"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">News<small>Bangla</small></span>
+    </div>
+
+  </div>
+
+  <div id="launch-overlay">
+    <div id="launch-circle"></div>
+  </div>
+
+  <script>
+
+    function relayPointer(type, clientX, clientY) {
+      const rootRect = document.documentElement.getBoundingClientRect();
+      const payload = {
+        source: 'kestford-icon-frame',
+        type,
+        x: typeof clientX === 'number' ? clientX - rootRect.left : -1,
+        y: typeof clientY === 'number' ? clientY - rootRect.top : -1
+      };
+
+      try {
+        if (window.parent && typeof window.parent.__kestfordFramePointer === 'function') {
+          window.parent.__kestfordFramePointer(payload);
+        }
+      } catch {}
+
+      try {
+        window.parent.postMessage(payload, '*');
+      } catch {}
+    }
+
+    function makeRipple(icon, clientX, clientY) {
+      if (!icon || typeof clientX !== 'number' || typeof clientY !== 'number') return;
+      const rect = icon.getBoundingClientRect();
+      const dot = document.createElement('div');
+      dot.className = 'ripple-dot';
+      dot.style.cssText = [
+        'width:' + icon.offsetWidth + 'px',
+        'height:' + icon.offsetHeight + 'px',
+        'left:' + (clientX - rect.left - icon.offsetWidth / 2) + 'px',
+        'top:' + (clientY - rect.top - icon.offsetHeight / 2) + 'px'
+      ].join(';');
+      icon.appendChild(dot);
+      dot.addEventListener('animationend', () => dot.remove());
+    }
+
+    document.addEventListener('pointerdown', e => {
+      relayPointer('down', e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('pointermove', e => {
+      relayPointer('move', e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('pointerup', () => {
+      relayPointer('end', -1, -1);
+    }, { passive: true });
+
+    document.addEventListener('pointercancel', () => {
+      relayPointer('cancel', -1, -1);
+    }, { passive: true });
+
+    document.addEventListener('pointerleave', () => {
+      relayPointer('leave', -1, -1);
+    }, { passive: true });
+
+    document.addEventListener('mousemove', e => {
+      relayPointer('move', e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', e => {
+      relayPointer('down', e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      relayPointer('leave', -1, -1);
+    }, { passive: true });
+
+    document.addEventListener('touchstart', e => {
+      if (!e.touches || !e.touches.length) return;
+      relayPointer('start', e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      if (!e.touches || !e.touches.length) return;
+      relayPointer('move', e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+      relayPointer('end', -1, -1);
+    }, { passive: true });
+
+    document.addEventListener('touchcancel', () => {
+      relayPointer('cancel', -1, -1);
+    }, { passive: true });
+
+    const infoApps = [...document.querySelectorAll('.app[data-info-title]')];
+    let activeInfoApp = null;
+
+    function hideInfo(app) {
+      if (!app) return;
+      app.classList.remove('show-info');
+    }
+
+    function hideAllInfo(exceptApp = null) {
+      infoApps.forEach(item => {
+        if (item !== exceptApp) hideInfo(item);
+      });
+      if (activeInfoApp && activeInfoApp !== exceptApp) activeInfoApp = null;
+    }
+
+    function showInfo(app) {
+      if (!app) return;
+      hideAllInfo(app);
+      app.classList.add('show-info');
+      activeInfoApp = app;
+    }
+
+    function startLongPress(app) {
+      if (!app || !app.dataset.infoTitle) return;
+      clearLongPress(app);
+      app.__pressMoved = false;
+      app.__longPressTimer = window.setTimeout(() => {
+        app.__longPressTriggered = true;
+        app.__suppressClickUntil = Date.now() + 900;
+        showInfo(app);
+      }, 520);
+    }
+
+    function clearLongPress(app) {
+      if (!app) return;
+      if (app.__longPressTimer) {
+        window.clearTimeout(app.__longPressTimer);
+        app.__longPressTimer = null;
+      }
+    }
+
+    document.addEventListener('pointerdown', e => {
+      if (!e.target.closest('.app')) hideAllInfo();
+    }, { passive: true });
+
+    document.addEventListener('touchstart', e => {
+      if (!e.target.closest('.app')) hideAllInfo();
+    }, { passive: true });
+
+    document.querySelectorAll('.app').forEach(app => {
+      const icon = app.querySelector('.icon');
+
+      app.addEventListener('pointerdown', e => {
+        app.__startX = e.clientX;
+        app.__startY = e.clientY;
+        app.__longPressTriggered = false;
+        makeRipple(icon, e.clientX, e.clientY);
+        relayPointer('down', e.clientX, e.clientY);
+        startLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('pointermove', e => {
+        if (typeof app.__startX === 'number' && typeof app.__startY === 'number') {
+          const moved = Math.hypot(e.clientX - app.__startX, e.clientY - app.__startY) > 12;
+          if (moved) clearLongPress(app);
+        }
+      }, { passive: true });
+
+      app.addEventListener('pointerup', () => {
+        clearLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('pointercancel', () => {
+        clearLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('pointerleave', () => {
+        clearLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('touchstart', e => {
+        if (!e.touches || !e.touches.length) return;
+        const touch = e.touches[0];
+        app.__startX = touch.clientX;
+        app.__startY = touch.clientY;
+        app.__longPressTriggered = false;
+        makeRipple(icon, touch.clientX, touch.clientY);
+        relayPointer('start', touch.clientX, touch.clientY);
+        startLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('touchmove', e => {
+        if (!e.touches || !e.touches.length) return;
+        const touch = e.touches[0];
+        if (typeof app.__startX === 'number' && typeof app.__startY === 'number') {
+          const moved = Math.hypot(touch.clientX - app.__startX, touch.clientY - app.__startY) > 12;
+          if (moved) clearLongPress(app);
+        }
+      }, { passive: true });
+
+      app.addEventListener('touchend', () => {
+        clearLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('touchcancel', () => {
+        clearLongPress(app);
+      }, { passive: true });
+
+      app.addEventListener('click', e => {
+        if (app.__longPressTriggered || (app.__suppressClickUntil && Date.now() < app.__suppressClickUntil)) {
+          app.__longPressTriggered = false;
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        const url = app.dataset.url;
+        const circle = document.getElementById('launch-circle');
+        const overlay = document.getElementById('launch-overlay');
+
+        circle.style.background = getComputedStyle(icon).background;
+        circle.style.animation = 'none';
+        void circle.offsetWidth;
+        circle.style.animation = 'expand .42s cubic-bezier(.22,.61,.36,1) forwards';
+        overlay.classList.add('on');
+
+        setTimeout(() => {
+          overlay.classList.remove('on');
+          window.open(url, '_blank');
+        }, 400);
+      });
+    });
+  </script>
+</body>
+</html>

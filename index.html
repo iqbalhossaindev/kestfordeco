@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Explore KestFord Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width:100%; height:100%; overflow:hidden; background:#000; font-family:'Outfit',sans-serif; }
+
+    /* ════════════════════════════════════════════
+       CUSTOM CURSOR
+    ════════════════════════════════════════════ */
+    body { cursor:none; }
+    #cur {
+      position:fixed; width:15px; height:15px; border-radius:50%;
+      background:rgba(255,255,255,.88);
+      box-shadow:0 0 14px 5px rgba(140,200,255,.5);
+      pointer-events:none; z-index:9999;
+      transform:translate(-50%,-50%);
+      transition:width .12s,height .12s;
+      mix-blend-mode:screen;
+    }
+    #cur.down { width:26px; height:26px; opacity:.65; }
+
+    /* ════════════════════════════════════════════
+       CANVAS
+    ════════════════════════════════════════════ */
+    #cv { position:fixed; inset:0; z-index:0; }
+
+    /* ════════════════════════════════════════════
+       SHELL
+    ════════════════════════════════════════════ */
+    #shell {
+      position:fixed; inset:0; z-index:10;
+      display:flex; flex-direction:column;
+      animation:fadeIn 1.1s ease both;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* ════════════════════════════════════════════
+       iOS STATUS BAR
+    ════════════════════════════════════════════ */
+    #ios-bar {
+      display:none; position:fixed; top:0; left:0; right:0;
+      height:50px; z-index:300;
+      padding:env(safe-area-inset-top,12px) 20px 0;
+      align-items:center; justify-content:space-between;
+    }
+    #ios-bar .ib-time {
+      font-size:15px; font-weight:600; color:#fff;
+      font-variant-numeric:tabular-nums; letter-spacing:-.01em;
+    }
+    #ios-bar .ib-right { display:flex; gap:6px; align-items:center; }
+    #ios-bar .ib-batt-pct {
+      font-size:11.5px; font-weight:500; color:#fff;
+      letter-spacing:-.01em;
+    }
+
+    /* Signal bars SVG (dynamic via JS) */
+    .sig-bars { display:flex; gap:1.5px; align-items:flex-end; height:12px; }
+    .sig-bar {
+      width:3px; border-radius:1px;
+      background:rgba(255,255,255,.28);
+      transition:background .5s, height .5s;
+    }
+    .sig-bar.on { background:#fff; }
+    .sig-bar:nth-child(1) { height:3px; }
+    .sig-bar:nth-child(2) { height:5.5px; }
+    .sig-bar:nth-child(3) { height:8px; }
+    .sig-bar:nth-child(4) { height:11px; }
+
+    /* Battery SVG */
+    #batt-svg { display:block; }
+    #batt-fill { transition:width .5s; }
+
+    /* ════════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════════ */
+    #hdr {
+      padding:26px 30px 8px;
+      display:flex; align-items:center; gap:14px; flex-shrink:0;
+    }
+    #hdr img {
+      width:44px; height:44px; object-fit:contain; border-radius:11px;
+      filter:drop-shadow(0 0 12px rgba(100,200,255,.5));
+    }
+    #hdr h1 {
+      font-weight:300; font-size:22px; letter-spacing:.04em;
+      color:rgba(255,255,255,.88);
+      text-shadow:0 0 28px rgba(80,180,255,.4);
+    }
+
+    /* ════════════════════════════════════════════
+       DESKTOP WEATHER WIDGET
+    ════════════════════════════════════════════ */
+    #weather-desk {
+      position:fixed; top:20px; right:24px; z-index:50;
+      width:230px;
+      background:rgba(255,255,255,.07);
+      backdrop-filter:blur(28px) saturate(1.6);
+      -webkit-backdrop-filter:blur(28px) saturate(1.6);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:16px 18px;
+      box-shadow:0 8px 32px rgba(0,0,0,.45);
+      animation:slideIn .6s .8s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes slideIn {
+      from{transform:translateY(-18px);opacity:0}
+      to{transform:none;opacity:1}
+    }
+    #weather-desk .wd-top {
+      display:flex; align-items:flex-start; justify-content:space-between;
+    }
+    #weather-desk .wd-temp {
+      font-size:44px; font-weight:200; color:#fff; line-height:1;
+      letter-spacing:-.02em;
+    }
+    #weather-desk .wd-unit {
+      font-size:18px; font-weight:300; color:rgba(255,255,255,.6);
+      align-self:flex-start; margin-top:5px;
+    }
+    #weather-desk .wd-icon { font-size:42px; line-height:1; }
+    #weather-desk .wd-cond {
+      font-size:13px; font-weight:400; color:rgba(255,255,255,.7);
+      margin-top:4px; letter-spacing:.01em;
+    }
+    #weather-desk .wd-loc {
+      font-size:11.5px; color:rgba(255,255,255,.45);
+      margin-top:2px; display:flex; align-items:center; gap:4px;
+    }
+    #weather-desk .wd-divider {
+      height:1px; background:rgba(255,255,255,.1); margin:12px 0;
+    }
+    #weather-desk .wd-row {
+      display:flex; justify-content:space-between;
+    }
+    #weather-desk .wd-stat { text-align:center; flex:1; }
+    #weather-desk .wd-stat-val {
+      font-size:14px; font-weight:500; color:#fff;
+    }
+    #weather-desk .wd-stat-lbl {
+      font-size:10px; color:rgba(255,255,255,.4); margin-top:2px;
+      letter-spacing:.04em; text-transform:uppercase;
+    }
+    #weather-desk .wd-loading {
+      text-align:center; color:rgba(255,255,255,.35); font-size:12px;
+      padding:8px 0;
+    }
+    /* Desktop clock in widget */
+    #weather-desk .wd-clock {
+      font-size:13px; font-weight:400; color:rgba(255,255,255,.55);
+      margin-top:10px; text-align:center; letter-spacing:.03em;
+      font-variant-numeric:tabular-nums;
+    }
+
+    /* ════════════════════════════════════════════
+       MOBILE WEATHER WIDGET
+    ════════════════════════════════════════════ */
+    #weather-mob {
+      display:none;
+      margin:6px 14px 2px;
+      background:rgba(255,255,255,.09);
+      backdrop-filter:blur(28px) saturate(1.8);
+      -webkit-backdrop-filter:blur(28px) saturate(1.8);
+      border:1px solid rgba(255,255,255,.13);
+      border-radius:20px;
+      padding:14px 18px;
+      flex-shrink:0;
+    }
+    #weather-mob .wm-top {
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    #weather-mob .wm-left {}
+    #weather-mob .wm-date {
+      font-size:11px; color:rgba(255,255,255,.45);
+      text-transform:uppercase; letter-spacing:.08em;
+    }
+    #weather-mob .wm-loc {
+      font-size:13px; font-weight:500; color:rgba(255,255,255,.75);
+      margin-top:1px;
+    }
+    #weather-mob .wm-temp-row {
+      display:flex; align-items:flex-end; gap:6px; margin-top:4px;
+    }
+    #weather-mob .wm-temp {
+      font-size:38px; font-weight:200; color:#fff; line-height:1;
+      letter-spacing:-.02em;
+    }
+    #weather-mob .wm-unit {
+      font-size:18px; font-weight:300; color:rgba(255,255,255,.5);
+      margin-bottom:4px;
+    }
+    #weather-mob .wm-icon { font-size:36px; line-height:1; }
+    #weather-mob .wm-cond {
+      font-size:12px; color:rgba(255,255,255,.6); margin-top:4px;
+    }
+    #weather-mob .wm-stats {
+      display:flex; gap:0; margin-top:10px;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:10px;
+    }
+    #weather-mob .wm-stat { flex:1; text-align:center; }
+    #weather-mob .wm-stat-v { font-size:13px; font-weight:500; color:#fff; }
+    #weather-mob .wm-stat-l {
+      font-size:9.5px; color:rgba(255,255,255,.38);
+      text-transform:uppercase; letter-spacing:.05em; margin-top:2px;
+    }
+    #weather-mob .wm-loading {
+      font-size:12px; color:rgba(255,255,255,.35); text-align:center; padding:6px 0;
+    }
+
+
+
+    /* ════════════════════════════════════════════
+       BOOT SPLASH
+    ════════════════════════════════════════════ */
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #boot-screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .boot-wrap {
+      width: min(420px, 86vw);
+      text-align: center;
+    }
+    .boot-logo {
+      width: 66px;
+      height: 66px;
+      object-fit: contain;
+      margin: 0 auto 18px;
+      display: block;
+      filter: drop-shadow(0 0 18px rgba(255,255,255,.14));
+    }
+    .boot-title {
+      font-size: clamp(34px, 6vw, 52px);
+      font-weight: 700;
+      letter-spacing: .14em;
+      margin-bottom: 24px;
+      color: rgba(255,255,255,.2);
+      background: linear-gradient(
+        270deg,
+        rgba(255,255,255,.16) 0%,
+        rgba(255,255,255,.16) 38%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,.16) 62%,
+        rgba(255,255,255,.16) 100%
+      );
+      background-size: 220% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: bootShine 2.8s linear infinite;
+      text-transform: uppercase;
+    }
+    .boot-loading {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 10px;
+    }
+    .boot-bar {
+      width: 180px;
+      max-width: 62vw;
+      height: 3px;
+      margin: 0 auto;
+      background: rgba(255,255,255,.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .boot-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #fff;
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(255,255,255,.28);
+      animation: bootLoad 2.8s ease-in-out infinite;
+    }
+    @keyframes bootLoad {
+      0% { width: 0%; }
+      65% { width: 78%; }
+      85% { width: 92%; }
+      100% { width: 100%; }
+    }
+    @keyframes bootShine {
+      0% { background-position: 100% 0; }
+      100% { background-position: -120% 0; }
+    }
+
+
+
+    /* ════════════════════════════════════════════
+       LOCATION GATE
+    ════════════════════════════════════════════ */
+    #location-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(16px) saturate(1.25);
+      -webkit-backdrop-filter: blur(16px) saturate(1.25);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    #location-gate.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .loc-card {
+      width: min(420px, 92vw);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      padding: 22px 20px 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.42);
+      text-align: center;
+    }
+    .loc-badge {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+      font-size: 24px;
+    }
+    .loc-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: rgba(255,255,255,.96);
+      letter-spacing: .01em;
+    }
+    .loc-copy {
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.64);
+    }
+    .loc-remember {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255,255,255,.78);
+      font-size: 12.5px;
+      user-select: none;
+      cursor: pointer;
+    }
+    .loc-remember input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.06);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+      flex-shrink: 0;
+    }
+    .loc-remember input::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0;
+      transform: scale(.7);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .loc-remember input:checked {
+      background: linear-gradient(160deg, rgba(61,220,132,.95), rgba(10,122,56,.95));
+      border-color: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+    }
+    .loc-remember input:checked::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .loc-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .loc-btn {
+      min-width: 132px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font: 500 13px 'Outfit', sans-serif;
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
+    }
+    .loc-btn:hover { background: rgba(255,255,255,.14); transform: translateY(-1px); }
+    .loc-btn:disabled { opacity: .55; cursor: default; transform: none; }
+    .loc-btn.primary {
+      background: linear-gradient(160deg, rgba(61,220,132,.95), rgba(10,122,56,.95));
+      border-color: rgba(255,255,255,.08);
+      box-shadow: 0 8px 28px rgba(61,220,132,.16);
+    }
+    .loc-status {
+      min-height: 18px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,.6);
+    }
+
+    /* ════════════════════════════════════════════
+       ICON IFRAME
+    ════════════════════════════════════════════ */
+    #icon-wrap { flex:1; padding:4px 10px 56px; overflow:hidden; min-height:0; }
+    #icon-frame { width:100%; height:100%; border:none; background:transparent; display:block; }
+
+    /* ════════════════════════════════════════════
+       iOS DOCK
+    ════════════════════════════════════════════ */
+    #ios-dock {
+      display:none; position:fixed;
+      bottom:max(18px,env(safe-area-inset-bottom));
+      left:50%; transform:translateX(-50%);
+      padding:10px 16px;
+      background:rgba(255,255,255,.13);
+      backdrop-filter:blur(24px) saturate(2);
+      -webkit-backdrop-filter:blur(24px) saturate(2);
+      border-radius:30px; border:1px solid rgba(255,255,255,.18);
+      gap:14px; align-items:center; z-index:200;
+    }
+    .dk {
+      width:54px; height:54px; border-radius:13px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 3px 14px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.18);
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:transform .18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .dk::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:50%;
+      background:linear-gradient(180deg,rgba(255,255,255,.22) 0%,transparent 100%);
+      border-radius:13px 13px 60% 60%;
+    }
+    .dk:hover  { transform:scale(1.18) translateY(-6px); }
+    .dk:active { transform:scale(.92); }
+    .dk svg    { width:28px; height:28px; z-index:1; }
+
+    /* ════════════════════════════════════════════
+       TASKBAR (desktop)
+    ════════════════════════════════════════════ */
+    #taskbar {
+      position:fixed; bottom:0; left:0; right:0; height:48px;
+      background:rgba(10,12,22,.82);
+      backdrop-filter:blur(28px) saturate(1.6);
+      -webkit-backdrop-filter:blur(28px) saturate(1.6);
+      border-top:1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 18px; z-index:100;
+    }
+    .tb-l { display:flex; align-items:center; gap:10px; }
+    #win-start {
+      width:34px; height:34px; background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.1); border-radius:6px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; color:#fff; font-size:17px; transition:background .2s;
+    }
+    #win-start:hover { background:rgba(255,255,255,.16); }
+    #win-search {
+      width:210px; height:28px; background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.1); border-radius:16px;
+      padding:0 14px; color:rgba(255,255,255,.7);
+      font-size:12px; font-family:'Outfit',sans-serif; outline:none;
+    }
+    #win-search::placeholder { color:rgba(255,255,255,.3); }
+    #tb-right { display:flex; align-items:center; gap:14px; }
+    #tb-weather-mini {
+      display:flex; align-items:center; gap:6px;
+      font-size:12.5px; color:rgba(255,255,255,.7);
+    }
+    #tb-weather-mini .tw-icon { font-size:16px; }
+    #tb-clock {
+      text-align:right; color:rgba(255,255,255,.75);
+      font-size:11.5px; line-height:1.55;
+      font-variant-numeric:tabular-nums;
+    }
+
+
+    @media (min-width:601px) {
+      #hdr { padding-right:300px; }
+      #icon-wrap { padding:10px 292px 58px 14px; }
+      #icon-frame { border-radius:22px; }
+      #weather-desk { top:18px; right:22px; width:248px; }
+    }
+
+    /* ════════════════════════════════════════════
+       MOBILE OVERRIDES
+    ════════════════════════════════════════════ */
+    @media (max-width:600px) {
+      body { cursor:auto; }
+      #cur { display:none; }
+      #taskbar { display:none; }
+      #weather-desk { display:none; }
+      #ios-bar  { display:flex; }
+      #ios-dock { display:flex; }
+      #weather-mob { display:block; }
+      #hdr { padding:54px 18px 4px; gap:10px; }
+      #hdr img { width:36px; height:36px; }
+      #hdr h1  { font-size:17px; }
+      #icon-wrap { padding:2px 0 88px; }
+    }
+
+    /* ════════════════════════════════════════════
+       RIPPLE
+    ════════════════════════════════════════════ */
+    .sp {
+      position:fixed; border-radius:50%; pointer-events:none; z-index:5;
+      border:1.5px solid rgba(130,210,255,.55);
+      animation:spOut .7s ease-out forwards;
+    }
+    @keyframes spOut {
+      from{width:0;height:0;opacity:.9;transform:translate(-50%,-50%)}
+      to{width:160px;height:160px;opacity:0;transform:translate(-50%,-50%)}
+    }
+
+    /* ════════════════════════════════════════════
+       WEATHER PULSE (loading shimmer)
+    ════════════════════════════════════════════ */
+    .pulse { animation:pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:.7} }
+  </style>
+</head>
+<body>
+
+<div id="cur"></div>
+<canvas id="cv"></canvas>
+
+<div id="boot-screen" aria-hidden="true">
+  <div class="boot-wrap">
+    <img class="boot-logo" src="logo.png" alt="KestFord logo" onerror="this.style.display='none'">
+    <div class="boot-title">KestFord OS</div>
+    <div class="boot-loading">Loading</div>
+    <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+  </div>
+</div>
+
+
+<div id="location-gate" aria-hidden="true">
+  <div class="loc-card" role="dialog" aria-modal="true" aria-labelledby="loc-title">
+    <div class="loc-badge">📍</div>
+    <div class="loc-title" id="loc-title">Allow location access?</div>
+    <div class="loc-copy">KestFord Project uses your location only to show local weather and city details on the home screen.</div>
+    <label class="loc-remember" for="loc-remember">
+      <input id="loc-remember" type="checkbox">
+      <span>Don't ask again on this browser</span>
+    </label>
+    <div class="loc-actions">
+      <button class="loc-btn primary" id="loc-allow" type="button">Allow location</button>
+      <button class="loc-btn" id="loc-deny" type="button">Not now</button>
+    </div>
+    <div class="loc-status" id="loc-status"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     iOS STATUS BAR
+══════════════════════════════════════════ -->
+<div id="ios-bar">
+  <span class="ib-time" id="ib-time">00:00</span>
+  <div class="ib-right">
+
+    <!-- Live signal bars -->
+    <div class="sig-bars" id="sig-bars">
+      <div class="sig-bar" id="sb1"></div>
+      <div class="sig-bar" id="sb2"></div>
+      <div class="sig-bar" id="sb3"></div>
+      <div class="sig-bar" id="sb4"></div>
+    </div>
+
+    <!-- WiFi icon -->
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+      <circle cx="8" cy="10" r=".9" fill="white"/>
+      <path d="M5 7.4Q8 5.2 11 7.4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M2.4 4.8Q8 1.1 13.6 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M0 2.4Q8-1.4 16 2.4" stroke="white" stroke-width="1.4" stroke-linecap="round" opacity=".3"/>
+    </svg>
+
+    <!-- Battery with live % -->
+    <span class="ib-batt-pct" id="batt-pct-txt">--</span>
+    <svg id="batt-svg" width="27" height="13" viewBox="0 0 27 13" fill="none">
+      <rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="white" stroke-opacity=".35"/>
+      <rect x="24" y="4" width="2.5" height="5" rx="1.2" fill="white" fill-opacity=".35"/>
+      <rect id="batt-fill" x="1.5" y="1.5" width="20" height="10" rx="2.5" fill="white"/>
+      <!-- charging bolt (hidden by default) -->
+      <path id="batt-bolt" d="M13 3.5L10.5 7h2.5L11 11l4.5-5.5H13L14.5 3.5z"
+            fill="rgba(0,0,0,.6)" display="none"/>
+    </svg>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SHELL
+══════════════════════════════════════════ -->
+<div id="shell">
+  <div id="hdr">
+    <img src="logo.png" alt="K" onerror="this.style.visibility='hidden'">
+    <h1>Explore KestFord Project</h1>
+  </div>
+
+  <!-- Mobile weather widget -->
+  <div id="weather-mob">
+    <div class="wm-loading pulse" id="wm-loading">Locating you…</div>
+    <div id="wm-content" style="display:none">
+      <div class="wm-top">
+        <div class="wm-left">
+          <div class="wm-date" id="wm-date">—</div>
+          <div class="wm-loc" id="wm-loc">—</div>
+          <div class="wm-temp-row">
+            <div class="wm-temp" id="wm-temp">—</div>
+            <div class="wm-unit">°C</div>
+          </div>
+          <div class="wm-cond" id="wm-cond">—</div>
+        </div>
+        <div class="wm-icon" id="wm-icon">🌡</div>
+      </div>
+      <div class="wm-stats">
+        <div class="wm-stat">
+          <div class="wm-stat-v" id="wm-hum">—</div>
+          <div class="wm-stat-l">Humidity</div>
+        </div>
+        <div class="wm-stat">
+          <div class="wm-stat-v" id="wm-wind">—</div>
+          <div class="wm-stat-l">Wind</div>
+        </div>
+        <div class="wm-stat">
+          <div class="wm-stat-v" id="wm-feel">—</div>
+          <div class="wm-stat-l">Feels Like</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Icon grid (iframe) -->
+  <div id="icon-wrap">
+    <iframe id="icon-frame" src="icon.html" scrolling="no" allowtransparency="true" title="KestFord Apps"></iframe>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DESKTOP WEATHER WIDGET
+══════════════════════════════════════════ -->
+<div id="weather-desk">
+  <div id="wd-loading" class="wd-loading pulse">Detecting location…</div>
+  <div id="wd-content" style="display:none">
+    <div class="wd-top">
+      <div>
+        <div class="wd-temp" id="wd-temp">—<span class="wd-unit">°C</span></div>
+        <div class="wd-cond" id="wd-cond">—</div>
+        <div class="wd-loc" id="wd-loc">
+          <svg width="10" height="12" viewBox="0 0 12 16" fill="rgba(255,255,255,.4)">
+            <path d="M6 0C3.2 0 1 2.2 1 5c0 3.7 5 10.5 5 10.5S11 8.7 11 5c0-2.8-2.2-5-5-5zm0 7a2 2 0 110-4 2 2 0 010 4z"/>
+          </svg>
+          <span id="wd-city">—</span>
+        </div>
+      </div>
+      <div class="wd-icon" id="wd-icon">🌡</div>
+    </div>
+    <div class="wd-divider"></div>
+    <div class="wd-row">
+      <div class="wd-stat">
+        <div class="wd-stat-val" id="wd-hum">—</div>
+        <div class="wd-stat-lbl">Humidity</div>
+      </div>
+      <div class="wd-stat">
+        <div class="wd-stat-val" id="wd-wind">—</div>
+        <div class="wd-stat-lbl">Wind</div>
+      </div>
+      <div class="wd-stat">
+        <div class="wd-stat-val" id="wd-feel">—</div>
+        <div class="wd-stat-lbl">Feels Like</div>
+      </div>
+    </div>
+    <div class="wd-clock" id="wd-clock-val">—</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     iOS DOCK
+══════════════════════════════════════════ -->
+<div id="ios-dock">
+  <div class="dk" style="background:linear-gradient(160deg,#1c96ff,#0051c8)" onclick="window.open('https://download.kestford.com/','_blank')">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v11m0 0-4-4m4 4 4-4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="17" width="16" height="2.5" rx="1.25" fill="white" opacity=".8"/></svg>
+  </div>
+  <div class="dk" style="background:linear-gradient(160deg,#3ddc84,#0a7a38)" onclick="window.open('https://www.kestford.com','_blank')">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 3c-2.4 2.7-3.8 5.7-3.8 9s1.4 6.3 3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/><path d="M12 3c2.4 2.7 3.8 5.7 3.8 9s-1.4 6.3-3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/><line x1="3" y1="9" x2="21" y2="9" stroke="white" stroke-width="1.4" stroke-linecap="round"/><line x1="3" y1="15" x2="21" y2="15" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </div>
+  <div class="dk" style="background:linear-gradient(160deg,#7b61ff,#3a1db5)" onclick="window.open('https://watch.kestford.com','_blank')">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6.5" width="19" height="13" rx="2.2" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.8"/><path d="M8 6.5 12 3l4 3.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 10.5l5 3-5 3V10.5z" fill="white" opacity=".9"/></svg>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ─── Utility ───────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+function setText(id, val){ const el=$(id); if(el) el.textContent=val; }
+function setHtml(id, val){ const el=$(id); if(el) el.innerHTML=val; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   0. BOOT SPLASH — only for root/project
+═══════════════════════════════════════════════════════════ */
+(function initBootSplash() {
+  const boot = $('boot-screen');
+  const frame = $('icon-frame');
+  if (!boot || !frame) return;
+
+  const start = performance.now();
+  const minVisible = 1600;
+  let done = false;
+
+  function hideBoot() {
+    if (done) return;
+    done = true;
+    const wait = Math.max(0, minVisible - (performance.now() - start));
+    setTimeout(() => {
+      boot.classList.add('is-hidden');
+      setTimeout(() => boot.remove(), 700);
+      setTimeout(() => showLocationGate(), 120);
+    }, wait);
+  }
+
+  frame.addEventListener('load', hideBoot, { once: true });
+  frame.addEventListener('error', hideBoot, { once: true });
+
+  window.addEventListener('load', () => {
+    setTimeout(hideBoot, 300);
+  }, { once: true });
+
+  setTimeout(hideBoot, 5000);
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   1. LIVE CLOCK  — updates every second
+═══════════════════════════════════════════════════════════ */
+function fmtTime(d) {
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function fmtTimeSec(d) {
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+}
+function fmtDate(d) {
+  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+}
+function fmtDateFull(d) {
+  return d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+}
+
+function tickClock() {
+  const n = new Date();
+  // iOS bar
+  setText('ib-time', fmtTime(n));
+  // Desktop widget clock
+  setText('wd-clock-val', fmtTimeSec(n) + '  ·  ' + fmtDate(n));
+  // Mobile weather date label
+  setText('wm-date', fmtDateFull(n));
+  // Taskbar
+  const tb = $('tb-clock');
+  if (tb) tb.innerHTML = `${fmtTime(n)}<br><span style="opacity:.5;font-size:10.5px">${fmtDate(n)}</span>`;
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+/* ═══════════════════════════════════════════════════════════
+   2. LIVE BATTERY
+═══════════════════════════════════════════════════════════ */
+function applyBattery(batt) {
+  const pct     = Math.round(batt.level * 100);
+  const charging= batt.charging;
+  const fillW   = Math.max(1, Math.round(pct * 20 / 100)); // max fill width=20px
+
+  setText('batt-pct-txt', pct + '%');
+  const fill = $('batt-fill');
+  if (fill) fill.setAttribute('width', fillW);
+  // Change colour: red < 20, yellow < 40, white otherwise
+  if (fill) {
+    if      (pct <= 20) fill.setAttribute('fill','#ff3b30');
+    else if (pct <= 40) fill.setAttribute('fill','#ffd60a');
+    else                fill.setAttribute('fill','white');
+  }
+  // Charging bolt
+  const bolt = $('batt-bolt');
+  if (bolt) bolt.setAttribute('display', charging ? 'block' : 'none');
+}
+
+(async () => {
+  try {
+    const batt = await navigator.getBattery();
+    applyBattery(batt);
+    batt.addEventListener('levelchange',   () => applyBattery(batt));
+    batt.addEventListener('chargingchange',() => applyBattery(batt));
+  } catch {
+    // Battery API not supported — show placeholder
+    setText('batt-pct-txt','');
+    const fill = $('batt-fill');
+    if (fill) fill.setAttribute('width','20');
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   3. LIVE SIGNAL BARS
+   Uses Network Information API where available; falls back to
+   simulating fluctuation so bars feel alive.
+═══════════════════════════════════════════════════════════ */
+function barsFromType(type) {
+  if (type === '4g')      return 4;
+  if (type === '3g')      return 3;
+  if (type === '2g')      return 2;
+  if (type === 'slow-2g') return 1;
+  return 4;
+}
+
+function renderBars(n) {
+  for (let i = 1; i <= 4; i++) {
+    const bar = $('sb' + i);
+    if (bar) bar.classList.toggle('on', i <= n);
+  }
+}
+
+function initSignal() {
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (conn) {
+    renderBars(barsFromType(conn.effectiveType));
+    conn.addEventListener('change', () => renderBars(barsFromType(conn.effectiveType)));
+  } else {
+    // Simulate natural variation
+    let bars = 4;
+    renderBars(bars);
+    setInterval(() => {
+      // Small random drift — mostly 4, occasionally 3
+      const r = Math.random();
+      if      (r < .06) bars = 2;
+      else if (r < .18) bars = 3;
+      else              bars = 4;
+      renderBars(bars);
+    }, 8000);
+  }
+}
+initSignal();
+
+/* ═══════════════════════════════════════════════════════════
+   4. WEATHER  — Open-Meteo (no API key needed)
+═══════════════════════════════════════════════════════════ */
+const WMO = {
+  0:'Clear Sky',   1:'Mainly Clear', 2:'Partly Cloudy', 3:'Overcast',
+  45:'Foggy',48:'Icy Fog',
+  51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',
+  61:'Light Rain',63:'Rain',65:'Heavy Rain',
+  71:'Light Snow',73:'Snow',75:'Heavy Snow',77:'Snow Grains',
+  80:'Rain Showers',81:'Showers',82:'Heavy Showers',
+  85:'Snow Showers',86:'Heavy Snow Showers',
+  95:'Thunderstorm',96:'Hail Storm',99:'Heavy Hail Storm'
+};
+const WMO_ICON = {
+  0:'☀️',1:'🌤',2:'⛅',3:'☁️',
+  45:'🌫',48:'🌫',
+  51:'🌦',53:'🌧',55:'🌧',
+  61:'🌦',63:'🌧',65:'🌧',
+  71:'🌨',73:'❄️',75:'❄️',77:'🌨',
+  80:'🌦',81:'🌧',82:'⛈',
+  85:'🌨',86:'❄️',
+  95:'⛈',96:'⛈',99:'⛈'
+};
+function wCode(code) {
+  return [WMO[code] || 'Unknown', WMO_ICON[code] || '🌡'];
+}
+
+async function fetchWeather(lat, lon) {
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    `&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code` +
+    `&wind_speed_unit=kmh&timezone=auto`;
+  const r = await fetch(url);
+  return r.json();
+}
+
+async function fetchCity(lat, lon) {
+  try {
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+      { headers:{ 'Accept-Language':'en' } }
+    );
+    const d = await r.json();
+    return d.address?.city || d.address?.town || d.address?.village || d.address?.county || 'Unknown';
+  } catch { return 'Your Location'; }
+}
+
+function applyWeather(data, city) {
+  const c    = data.current;
+  const temp = Math.round(c.temperature_2m);
+  const feel = Math.round(c.apparent_temperature);
+  const hum  = Math.round(c.relative_humidity_2m);
+  const wind = Math.round(c.wind_speed_10m);
+  const [cond, icon] = wCode(c.weather_code);
+
+  // Desktop
+  setText('wd-temp',  temp);
+  setHtml('wd-temp',  `${temp}<span class="wd-unit">°C</span>`);
+  setText('wd-cond',  cond);
+  setText('wd-city',  city);
+  setText('wd-hum',   hum + '%');
+  setText('wd-wind',  wind + ' km/h');
+  setText('wd-feel',  feel + '°C');
+  setText('wd-icon',  icon);
+  $('wd-loading')  && ($('wd-loading').style.display='none');
+  $('wd-content')  && ($('wd-content').style.display='block');
+
+  // Mobile
+  setText('wm-temp',  temp);
+  setText('wm-loc',   city);
+  setText('wm-cond',  cond);
+  setText('wm-icon',  icon);
+  setText('wm-hum',   hum + '%');
+  setText('wm-wind',  wind + ' km/h');
+  setText('wm-feel',  feel + '°C');
+  $('wm-loading')  && ($('wm-loading').style.display='none');
+  $('wm-content')  && ($('wm-content').style.display='block');
+
+  // Taskbar mini
+  const twi = $('tw-icon');
+  if (twi) {
+    twi.textContent = icon;
+    const twt = $('tw-temp');
+    if (twt) twt.textContent = temp + '°C · ' + cond;
+  }
+}
+
+function weatherError(message = '📍 Allow location for weather') {
+  setText('wd-loading', message);
+  const wl2 = $('wm-loading');
+  if (wl2) {
+    wl2.classList.remove('pulse');
+    wl2.textContent = message;
+  }
+}
+
+let weatherStarted = false;
+let weatherRefreshTimer = null;
+let locationGateReady = false;
+const LOCATION_PREF_KEY = 'kestford_location_pref';
+
+function getSavedLocationPreference() {
+  try {
+    return localStorage.getItem(LOCATION_PREF_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+function saveLocationPreference(value) {
+  try {
+    if (value) localStorage.setItem(LOCATION_PREF_KEY, value);
+    else localStorage.removeItem(LOCATION_PREF_KEY);
+  } catch {}
+}
+
+function rememberLocationChoice(value) {
+  const remember = $('loc-remember');
+  if (remember && remember.checked) saveLocationPreference(value);
+  else saveLocationPreference('');
+}
+
+function setLocationStatus(message = '') {
+  const el = $('loc-status');
+  if (!el) return;
+  el.textContent = message;
+}
+
+function hideLocationGate() {
+  const gate = $('location-gate');
+  if (!gate) return;
+  gate.classList.remove('is-visible');
+}
+
+function unlockLocationButtons() {
+  const allow = $('loc-allow');
+  const deny = $('loc-deny');
+  if (allow) allow.disabled = false;
+  if (deny) deny.disabled = false;
+}
+
+function startWeatherFromPosition(pos) {
+  const lat = pos.coords.latitude;
+  const lon = pos.coords.longitude;
+
+  Promise.all([fetchWeather(lat, lon), fetchCity(lat, lon)]).then(([wData, city]) => {
+    applyWeather(wData, city);
+    hideLocationGate();
+
+    if (weatherRefreshTimer) clearInterval(weatherRefreshTimer);
+    weatherRefreshTimer = setInterval(async () => {
+      try {
+        const fresh = await fetchWeather(lat, lon);
+        applyWeather(fresh, city);
+      } catch {}
+    }, 600000);
+  }).catch(() => {
+    weatherStarted = false;
+    unlockLocationButtons();
+    setLocationStatus('Could not load weather right now.');
+    weatherError('📍 Could not load weather');
+    setTimeout(hideLocationGate, 1200);
+  });
+}
+
+function requestWeatherPermission() {
+  if (weatherStarted) return;
+  if (!navigator.geolocation) {
+    setLocationStatus('Location is not supported on this device.');
+    weatherError('📍 Location is not supported');
+    setTimeout(hideLocationGate, 1200);
+    return;
+  }
+
+  weatherStarted = true;
+  setLocationStatus('Waiting for browser permission…');
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    setLocationStatus('Location granted.');
+    startWeatherFromPosition(pos);
+  }, err => {
+    weatherStarted = false;
+    unlockLocationButtons();
+
+    if (err && err.code === 1) {
+      setLocationStatus('Location denied. You can allow it later from your browser settings.');
+      weatherError('📍 Location denied for weather');
+    } else {
+      setLocationStatus('Could not get your location right now.');
+      weatherError('📍 Could not get your location');
+    }
+
+    setTimeout(hideLocationGate, 1600);
+  }, { timeout: 10000, maximumAge: 300000, enableHighAccuracy: false });
+}
+
+function showLocationGate() {
+  const gate = $('location-gate');
+  if (!gate || locationGateReady) return;
+  locationGateReady = true;
+
+  const savedPref = getSavedLocationPreference();
+  if (savedPref === 'always_yes') {
+    setLocationStatus('Saved choice: location on.');
+    requestWeatherPermission();
+    return;
+  }
+  if (savedPref === 'always_no') {
+    setLocationStatus('Saved choice: location off.');
+    weatherError('📍 Weather is off by saved choice');
+    return;
+  }
+
+  gate.classList.add('is-visible');
+  setLocationStatus('Choose if you want local weather on the home screen.');
+
+  const allow = $('loc-allow');
+  const deny = $('loc-deny');
+
+  if (allow) {
+    allow.addEventListener('click', () => {
+      rememberLocationChoice('always_yes');
+      allow.disabled = true;
+      if (deny) deny.disabled = true;
+      requestWeatherPermission();
+    }, { once: true });
+  }
+
+  if (deny) {
+    deny.addEventListener('click', () => {
+      rememberLocationChoice('always_no');
+      setLocationStatus('Weather will stay off until location is allowed.');
+      weatherError('📍 Weather is off until location is allowed');
+      hideLocationGate();
+    }, { once: true });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. TASKBAR BUILD (desktop)
+═══════════════════════════════════════════════════════════ */
+function buildTaskbar() {
+  if ($('taskbar')) return;
+  const tb = document.createElement('div');
+  tb.id = 'taskbar';
+  tb.innerHTML = `
+    <div class="tb-l">
+      <div id="win-start">⊞</div>
+      <input id="win-search" type="text" placeholder="Search KestFord…" autocomplete="off"/>
+    </div>
+    <div id="tb-right">
+      <div id="tb-weather-mini">
+        <span class="tw-icon" id="tw-icon">🌡</span>
+        <span id="tw-temp" style="font-size:12px;color:rgba(255,255,255,.6)">Loading…</span>
+      </div>
+      <div id="tb-clock"></div>
+    </div>
+  `;
+  document.body.appendChild(tb);
+  tickClock();
+}
+if (window.innerWidth > 600) buildTaskbar();
+window.addEventListener('resize', () => { if (window.innerWidth > 600) buildTaskbar(); });
+
+/* ═══════════════════════════════════════════════════════════
+   6. CURSOR
+═══════════════════════════════════════════════════════════ */
+const cur = $('cur');
+document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+document.addEventListener('mousedown', () => cur.classList.add('down'));
+document.addEventListener('mouseup',   () => cur.classList.remove('down'));
+
+/* ═══════════════════════════════════════════════════════════
+   7. RIPPLE
+═══════════════════════════════════════════════════════════ */
+function mkSp(x,y) {
+  const s=document.createElement('div'); s.className='sp';
+  s.style.left=x+'px'; s.style.top=y+'px';
+  document.body.appendChild(s);
+  s.addEventListener('animationend',()=>s.remove());
+}
+document.addEventListener('click',e=>mkSp(e.clientX,e.clientY));
+document.addEventListener('touchstart',e=>{
+  [...e.touches].forEach(t=>mkSp(t.clientX,t.clientY));
+},{passive:true});
+
+/* ═══════════════════════════════════════════════════════════
+   8. CANVAS — Stars + Starfall
+═══════════════════════════════════════════════════════════ */
+const cv=document.getElementById('cv'), cx=cv.getContext('2d');
+let W,H;
+const mo={x:-999,y:-999};
+
+function handleFramePointer(data) {
+  if (!data || data.source !== 'kestford-icon-frame') return;
+
+  if (data.type === 'leave' || data.type === 'end' || data.type === 'cancel') {
+    mo.x = -999;
+    mo.y = -999;
+    return;
+  }
+
+  if (typeof data.x !== 'number' || typeof data.y !== 'number') return;
+
+  const frame = $('icon-frame');
+  if (!frame) return;
+  const rect = frame.getBoundingClientRect();
+  const localX = Math.max(0, Math.min(rect.width, data.x));
+  const localY = Math.max(0, Math.min(rect.height, data.y));
+
+  mo.x = rect.left + localX;
+  mo.y = rect.top + localY;
+
+  if (data.type === 'down' || data.type === 'start') {
+    mkSp(mo.x, mo.y);
+  }
+}
+window.__kestfordFramePointer = handleFramePointer;
+window.addEventListener('message', e => handleFramePointer(e.data));
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+
+const STARS=Array.from({length:200},()=>({
+  xf:Math.random(),yf:Math.random(),
+  r:.3+Math.random()*1.9,
+  op:.2+Math.random()*.8,opd:Math.random()>.5?1:-1,
+  tw:.004+Math.random()*.014,
+  hue:190+Math.random()*60,
+  vy:.012+Math.random()*.055
+}));
+
+function mkFall(){
+  return{xf:Math.random(),yf:-.04,
+    vx:(Math.random()-.5)*.0006,vy:.003+Math.random()*.004,
+    len:.04+Math.random()*.07,op:.4+Math.random()*.45,
+    hue:195+Math.random()*45,life:0,maxLife:200+Math.random()*320};
+}
+const FALLS=Array.from({length:5},()=>{const f=mkFall();f.yf=Math.random();return f;});
+
+function draw(){
+  cx.clearRect(0,0,W,H);
+  const g=cx.createRadialGradient(W*.28,H*.32,0,W*.5,H*.5,H*.95);
+  g.addColorStop(0,'rgba(6,12,46,.55)');g.addColorStop(.55,'rgba(3,7,20,.32)');g.addColorStop(1,'rgba(0,0,0,0)');
+  cx.fillStyle=g;cx.fillRect(0,0,W,H);
+  STARS.forEach(s=>{
+    s.op+=s.tw*s.opd;if(s.op>.96||s.op<.15)s.opd*=-1;
+    s.yf+=s.vy/H;if(s.yf>1){s.yf=0;s.xf=Math.random();}
+    const sx=s.xf*W,sy=s.yf*H,d=Math.hypot(sx-mo.x,sy-mo.y);
+    const glow=d<100?(1-d/100)*1.4:0;
+    const r=s.r+glow*2.2,a=Math.min(1,s.op+glow*.4);
+    cx.beginPath();cx.arc(sx,sy,r,0,Math.PI*2);
+    cx.fillStyle=`hsla(${s.hue},76%,93%,${a})`;cx.fill();
+    if(glow>.15){
+      const h2=cx.createRadialGradient(sx,sy,0,sx,sy,r*6);
+      h2.addColorStop(0,`hsla(${s.hue},100%,88%,${glow*.3})`);h2.addColorStop(1,'transparent');
+      cx.beginPath();cx.arc(sx,sy,r*6,0,Math.PI*2);cx.fillStyle=h2;cx.fill();
+    }
+  });
+  FALLS.forEach((f,i)=>{
+    f.xf+=f.vx;f.yf+=f.vy;f.life++;
+    const op=f.op*Math.sin((f.life/f.maxLife)*Math.PI);
+    const x1=f.xf*W,y1=f.yf*H,x0=x1-f.vx*f.len*W*18,y0=y1-f.vy*f.len*H*18;
+    const gr=cx.createLinearGradient(x0,y0,x1,y1);
+    gr.addColorStop(0,'transparent');gr.addColorStop(1,`hsla(${f.hue},90%,94%,${op})`);
+    cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x1,y1);cx.strokeStyle=gr;cx.lineWidth=1.2;cx.stroke();
+    cx.beginPath();cx.arc(x1,y1,1.3,0,Math.PI*2);cx.fillStyle=`hsla(${f.hue},100%,98%,${op})`;cx.fill();
+    if(f.life>=f.maxLife||f.yf>1.06)FALLS[i]=mkFall();
+  });
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+document.addEventListener('mousemove',e=>{mo.x=e.clientX;mo.y=e.clientY;});
+document.addEventListener('touchstart',e=>{
+  if (!e.touches || !e.touches.length) return;
+  mo.x=e.touches[0].clientX;
+  mo.y=e.touches[0].clientY;
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+  if (!e.touches || !e.touches.length) return;
+  mo.x=e.touches[0].clientX;
+  mo.y=e.touches[0].clientY;
+},{passive:true});
+document.addEventListener('touchend',()=>{mo.x=-999;mo.y=-999;});
+document.addEventListener('touchcancel',()=>{mo.x=-999;mo.y=-999;});
+</script>
+</body>
+</html>
