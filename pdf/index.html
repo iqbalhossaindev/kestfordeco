@@ -1,1 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KestFord PDF Tool — Free Online PDF Editor</title>
+  <meta name="description" content="Free professional PDF editor by KestFord. Merge, split, compress, sign, watermark, convert and annotate PDFs in real-time — no install, no watermark." />
+  <meta property="og:title" content="KestFord PDF Tool" />
+  <meta property="og:description" content="Free professional PDF editor. No watermarks, no sign-up." />
+  <meta property="og:image" content="../logo.png" />
+  <link rel="icon" href="../logo.png" onerror="this.href=''" />
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- pdf-lib -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+<body>
 
+<!-- ╔══════════════════════════════════════════════╗
+     ║  LANDING PAGE                               ║
+     ╚══════════════════════════════════════════════╝ -->
+<div id="landing" class="visible">
+
+  <!-- Nav -->
+  <nav class="land-nav">
+    <div class="land-nav-logo">
+      <img src="../logo.png" alt="KestFord" onerror="this.style.display='none'" />
+      <div class="tb-logo-badge" id="land-badge" style="display:none">KF</div>
+      <span style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700">KestFord <span style="color:#7aa3ff">PDF</span></span>
+    </div>
+    <div class="land-nav-spacer"></div>
+    <a href="#land-tools" class="hide-sm">Tools</a>
+    <a href="#land-features" class="hide-sm">Features</a>
+    <a href="https://www.kestford.com" target="_blank" rel="noopener" class="hide-sm">Agency</a>
+    <button onclick="showApp()" class="btn-hero primary" style="padding:9px 20px;font-size:13px;margin-left:8px">Open Editor →</button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="hero-badge">🆓 Free · No Watermark · No Sign-Up · Browser-Based</div>
+    <h1>Professional PDF Editing,<br/>Completely Free</h1>
+    <p>Edit, annotate, merge, split, sign, compress, convert and secure PDFs in real-time — right in your browser.</p>
+    <div class="hero-cta">
+      <button onclick="showApp()" class="btn-hero primary">🚀 Open PDF Editor</button>
+      <a href="#land-tools" class="btn-hero outline">View All Tools</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">20+</div><div class="hs-l">PDF Tools</div></div>
+      <div class="hs"><div class="hs-n">100%</div><div class="hs-l">Browser-Based</div></div>
+      <div class="hs"><div class="hs-n">Real-Time</div><div class="hs-l">Editing</div></div>
+      <div class="hs"><div class="hs-n">Free</div><div class="hs-l">Forever</div></div>
+    </div>
+  </section>
+
+  <!-- Tools Grid -->
+  <section class="sec" id="land-tools">
+    <div class="sec-head">
+      <div class="sec-tag">All Tools</div>
+      <h2>Everything You Need for PDFs</h2>
+      <p>All tools run 100% in your browser. Your files never leave your device.</p>
+    </div>
+    <div class="land-tools-grid">
+      <div class="land-tool-card" onclick="openTool('viewer')"><div class="ltc-icon blue">📄</div><h3>PDF Viewer</h3><p>View, zoom, rotate and navigate any PDF.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('annotate')"><div class="ltc-icon orange">✏️</div><h3>Annotate PDF</h3><p>Draw, highlight and add text in real-time on any PDF page.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('merge')"><div class="ltc-icon blue">🔗</div><h3>Merge PDFs</h3><p>Combine multiple PDFs into one file.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('split')"><div class="ltc-icon orange">✂️</div><h3>Split PDF</h3><p>Extract individual pages or custom ranges.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('compress')"><div class="ltc-icon green">📦</div><h3>Compress PDF</h3><p>Reduce file size while keeping quality.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('convert')"><div class="ltc-icon purple">🔁</div><h3>Convert PDF</h3><p>Convert PDF pages to JPG, PNG, or text.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('sign')"><div class="ltc-icon green">✍️</div><h3>E-Signature</h3><p>Draw and embed your signature into a PDF.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('forms')"><div class="ltc-icon blue">📝</div><h3>Fill Forms</h3><p>Fill PDF form fields and flatten them.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('ocr')"><div class="ltc-icon teal">🔍</div><h3>Extract Text</h3><p>OCR: extract all selectable text from any PDF.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('watermark')"><div class="ltc-icon blue">💧</div><h3>Watermark</h3><p>Add custom text watermarks to all pages.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('password')"><div class="ltc-icon red">🔒</div><h3>Password Protect</h3><p>Protect your PDF with a password.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('redact')"><div class="ltc-icon red">⬛</div><h3>Redaction</h3><p>Permanently black out sensitive content.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('rotate')"><div class="ltc-icon orange">🔄</div><h3>Rotate Pages</h3><p>Rotate pages by 90°, 180° or 270°.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('reorder')"><div class="ltc-icon teal">↕️</div><h3>Reorder Pages</h3><p>Drag and drop to rearrange page order.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('delete')"><div class="ltc-icon red">🗑️</div><h3>Delete Pages</h3><p>Remove specific pages from your PDF.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('crop')"><div class="ltc-icon purple">🔲</div><h3>Crop Pages</h3><p>Trim margins and crop all PDF pages.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('pagenums')"><div class="ltc-icon yellow">🔢</div><h3>Page Numbers</h3><p>Add page numbers with custom prefix and position.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('header')"><div class="ltc-icon teal">📌</div><h3>Header & Footer</h3><p>Add text to the top and bottom of every page.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('metadata')"><div class="ltc-icon yellow">📋</div><h3>Edit Metadata</h3><p>Update PDF title, author, subject, keywords.</p><span class="ltc-badge badge-free">Free</span></div>
+      <div class="land-tool-card" onclick="openTool('ai')"><div class="ltc-icon purple">🤖</div><h3>AI Summary</h3><p>Summarise, translate or rewrite PDF content with AI.</p><span class="ltc-badge badge-ai">AI</span></div>
+      <div class="land-tool-card" onclick="openTool('compare')"><div class="ltc-icon teal">🔎</div><h3>Compare PDFs</h3><p>Compare two PDFs for differences.</p><span class="ltc-badge badge-free">Free</span></div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="sec" id="land-features" style="background:var(--bg2);border-top:1px solid var(--border);">
+    <div class="sec-head">
+      <div class="sec-tag">Why KestFord PDF</div>
+      <h2>Built for Privacy & Speed</h2>
+      <p>No uploads to servers. Files never leave your device.</p>
+    </div>
+    <div class="land-tools-grid">
+      <div class="land-tool-card"><div class="ltc-icon green">🔐</div><h3>100% Private</h3><p>All processing runs in your browser. No file ever touches our servers.</p></div>
+      <div class="land-tool-card"><div class="ltc-icon orange">⚡</div><h3>Real-Time Editing</h3><p>See your changes live on the PDF canvas as you work.</p></div>
+      <div class="land-tool-card"><div class="ltc-icon blue">📱</div><h3>Mobile & Desktop</h3><p>Full mobile UI with touch support, and a dedicated desktop layout.</p></div>
+      <div class="land-tool-card"><div class="ltc-icon green">🆓</div><h3>Always Free</h3><p>Every single tool is free. No watermarks, no sign-up, no limits.</p></div>
+    </div>
+  </section>
+
+  <!-- KestFord Agency Promo -->
+  <section style="padding:20px 0 0">
+    <div class="kf-promo">
+      <div>
+        <h2>Power Your Brand with <span>KestFord</span></h2>
+        <p>KestFord PDF Tool is one of many free tools we build. KestFord is a premium digital agency delivering world-class web design, graphic design, digital marketing, cyber security and business growth services for brands that mean business.</p>
+        <div class="kf-svcs">
+          <span class="kf-svc">Web Design</span><span class="kf-svc">Graphic Design</span>
+          <span class="kf-svc">Digital Marketing</span><span class="kf-svc">Cyber Security</span>
+          <span class="kf-svc">Performance Marketing</span><span class="kf-svc">Business Growth</span>
+        </div>
+        <a href="https://www.kestford.com" target="_blank" rel="noopener" class="btn-hero primary" style="font-size:14px">Visit KestFord.com →</a>
+      </div>
+      <div class="kf-stat-cards">
+        <div class="kf-stat-card"><h3>120+</h3><p>Projects Delivered</p></div>
+        <div class="kf-stat-card"><h3>98%</h3><p>Client Satisfaction</p></div>
+        <div class="kf-stat-card"><h3>6 yrs</h3><p>Industry Experience</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="land-footer">
+    <div class="land-footer-txt">© 2025 <a href="https://www.kestford.com" target="_blank">KestFord</a> · KestFord PDF Tool · All rights reserved.</div>
+    <div class="land-footer-txt">
+      <a href="https://www.kestford.com" target="_blank">Agency</a> ·
+      <a href="mailto:hello@kestford.com">hello@kestford.com</a>
+    </div>
+  </footer>
+</div><!-- /landing -->
+
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║  EDITOR APP                                 ║
+     ╚══════════════════════════════════════════════╝ -->
+<div id="app">
+
+  <!-- ── Top Bar ── -->
+  <div id="topbar">
+    <!-- Logo -->
+    <a class="tb-logo" href="#" onclick="showLanding();return false">
+      <img src="../logo.png" alt="KF" id="tb-logo-img" onerror="this.style.display='none';document.getElementById('tb-logo-badge').style.display='flex'" />
+      <div class="tb-logo-badge" id="tb-logo-badge" style="display:none">KF</div>
+      <span class="tb-logo-text">KestFord <span>PDF</span></span>
+    </a>
+    <div class="tb-sep"></div>
+    <span id="app-tool-name" class="tb-tool-name">Select</span>
+    <div class="tb-spacer"></div>
+
+    <!-- View toggle -->
+    <div class="tb-view-toggle" id="view-toggle">
+      <button id="vt-mobile" onclick="setViewMode('mobile')">📱 Mobile</button>
+      <button id="vt-desktop" onclick="setViewMode('desktop')" class="active">🖥️ Desktop</button>
+    </div>
+
+    <!-- Upload -->
+    <label class="tb-btn" style="position:relative;overflow:hidden" title="Open PDF">
+      📂 Open PDF
+      <input type="file" accept=".pdf" id="tb-file-input" style="position:absolute;inset:0;opacity:0;cursor:pointer" />
+    </label>
+
+    <!-- Undo -->
+    <button class="tb-btn" onclick="undoLast()" title="Undo last annotation">↩ Undo</button>
+
+    <!-- Download -->
+    <button class="tb-btn primary" id="tb-download" onclick="Editor.download()" style="display:none">⬇ Download PDF</button>
+
+    <!-- KF link -->
+    <a class="tb-kf-link" href="https://www.kestford.com" target="_blank" rel="noopener">KestFord Agency</a>
+  </div>
+
+  <!-- ── Main ── -->
+  <div id="main">
+
+    <!-- ── SIDEBAR (Desktop) ── -->
+    <aside id="sidebar">
+      <div class="sb-group">
+        <span class="sb-group-lbl">View & Annotate</span>
+        <button class="sb-btn" data-tool-id="viewer"   onclick="activateTool('viewer')"  ><span class="sb-icon">📄</span><span class="sb-label">PDF Viewer</span></button>
+        <button class="sb-btn" data-tool-id="annotate" onclick="activateTool('annotate')"><span class="sb-icon">✏️</span><span class="sb-label">Annotate</span></button>
+      </div>
+      <div class="sb-group">
+        <span class="sb-group-lbl">File Tools</span>
+        <button class="sb-btn" data-tool-id="merge"    onclick="activateTool('merge')"   ><span class="sb-icon">🔗</span><span class="sb-label">Merge PDFs</span></button>
+        <button class="sb-btn" data-tool-id="split"    onclick="activateTool('split')"   ><span class="sb-icon">✂️</span><span class="sb-label">Split PDF</span></button>
+        <button class="sb-btn" data-tool-id="compress" onclick="activateTool('compress')"><span class="sb-icon">📦</span><span class="sb-label">Compress</span></button>
+        <button class="sb-btn" data-tool-id="convert"  onclick="activateTool('convert')" ><span class="sb-icon">🔁</span><span class="sb-label">Convert</span></button>
+      </div>
+      <div class="sb-group">
+        <span class="sb-group-lbl">Pages</span>
+        <button class="sb-btn" data-tool-id="rotate"   onclick="activateTool('rotate')"  ><span class="sb-icon">🔄</span><span class="sb-label">Rotate</span></button>
+        <button class="sb-btn" data-tool-id="reorder"  onclick="activateTool('reorder')" ><span class="sb-icon">↕️</span><span class="sb-label">Reorder</span></button>
+        <button class="sb-btn" data-tool-id="delete"   onclick="activateTool('delete')"  ><span class="sb-icon">🗑️</span><span class="sb-label">Delete Pages</span></button>
+        <button class="sb-btn" data-tool-id="crop"     onclick="activateTool('crop')"    ><span class="sb-icon">🔲</span><span class="sb-label">Crop</span></button>
+        <button class="sb-btn" data-tool-id="pagenums" onclick="activateTool('pagenums')"><span class="sb-icon">🔢</span><span class="sb-label">Page Numbers</span></button>
+        <button class="sb-btn" data-tool-id="header"   onclick="activateTool('header')"  ><span class="sb-icon">📌</span><span class="sb-label">Header & Footer</span></button>
+      </div>
+      <div class="sb-group">
+        <span class="sb-group-lbl">Forms & Sign</span>
+        <button class="sb-btn" data-tool-id="forms"    onclick="activateTool('forms')"   ><span class="sb-icon">📝</span><span class="sb-label">Fill Forms</span></button>
+        <button class="sb-btn" data-tool-id="sign"     onclick="activateTool('sign')"    ><span class="sb-icon">✍️</span><span class="sb-label">E-Signature</span></button>
+      </div>
+      <div class="sb-group">
+        <span class="sb-group-lbl">Smart & AI</span>
+        <button class="sb-btn" data-tool-id="ocr"      onclick="activateTool('ocr')"     ><span class="sb-icon">🔍</span><span class="sb-label">Extract Text</span></button>
+        <button class="sb-btn" data-tool-id="ai"       onclick="activateTool('ai')"      ><span class="sb-icon">🤖</span><span class="sb-label">AI Summary</span><span class="sb-badge badge-ai">AI</span></button>
+        <button class="sb-btn" data-tool-id="compare"  onclick="activateTool('compare')" ><span class="sb-icon">🔎</span><span class="sb-label">Compare PDFs</span></button>
+      </div>
+      <div class="sb-group">
+        <span class="sb-group-lbl">Security</span>
+        <button class="sb-btn" data-tool-id="watermark"onclick="activateTool('watermark')"><span class="sb-icon">💧</span><span class="sb-label">Watermark</span></button>
+        <button class="sb-btn" data-tool-id="password" onclick="activateTool('password')"><span class="sb-icon">🔒</span><span class="sb-label">Password</span></button>
+        <button class="sb-btn" data-tool-id="redact"   onclick="activateTool('redact')"  ><span class="sb-icon">⬛</span><span class="sb-label">Redact</span></button>
+        <button class="sb-btn" data-tool-id="metadata" onclick="activateTool('metadata')"><span class="sb-icon">📋</span><span class="sb-label">Metadata</span></button>
+      </div>
+
+      <!-- KF Sidebar Ad -->
+      <div class="sb-ad">
+        <div class="sb-ad-lbl">Powered by</div>
+        <h4>KestFord Agency</h4>
+        <p>Premium web design, branding & marketing for brands that mean business.</p>
+        <a href="https://www.kestford.com" target="_blank" rel="noopener">Visit KestFord.com →</a>
+      </div>
+    </aside>
+
+    <!-- ── Editor Center ── -->
+    <div id="editor-area">
+
+      <!-- Canvas toolbar (desktop) -->
+      <div id="canvas-toolbar">
+        <!-- Annotation tools -->
+        <button class="ct-btn" data-tool-btn="select" onclick="Editor.setTool('select')" title="Select">🖱️ Select</button>
+        <button class="ct-btn" data-tool-btn="text"   onclick="Editor.setTool('text')"   title="Add text">📝 Text</button>
+        <button class="ct-btn" data-tool-btn="draw"   onclick="Editor.setTool('draw')"   title="Draw/Pen">✏️ Draw</button>
+        <button class="ct-btn" data-tool-btn="highlight" onclick="Editor.setTool('highlight')" title="Highlight">🖍️ Highlight</button>
+        <button class="ct-btn" data-tool-btn="erase"  onclick="Editor.setTool('erase')"  title="Eraser">🧹 Erase</button>
+        <div class="ct-sep"></div>
+        <!-- Draw options -->
+        <span style="font-size:11px;color:var(--muted);white-space:nowrap">Color:</span>
+        <input type="color" id="ct-color" value="#ff0000" style="width:28px;height:24px;border:none;background:none;cursor:pointer;padding:0" title="Tool color" />
+        <span style="font-size:11px;color:var(--muted);white-space:nowrap">Size:</span>
+        <input type="range" id="ct-size" min="1" max="20" value="3" style="width:70px" title="Brush size" />
+        <span style="font-size:11px;color:var(--muted);white-space:nowrap">Font:</span>
+        <input type="number" id="ct-fontsize" value="16" min="8" max="72" style="width:42px;background:var(--card);border:1px solid var(--border);border-radius:5px;color:var(--text);padding:3px;text-align:center" />
+        <div class="ct-sep"></div>
+        <!-- Zoom & nav -->
+        <button class="ct-btn" onclick="Editor.zoom(-0.2)">−</button>
+        <input class="ct-zoom" id="ct-zoom" value="140%" style="width:52px;background:var(--card);border:1px solid var(--border);border-radius:5px;color:var(--text);padding:4px;text-align:center;font-size:12px" readonly />
+        <button class="ct-btn" onclick="Editor.zoom(0.2)">+</button>
+        <div class="ct-sep"></div>
+        <div class="ct-pg-info">
+          Pg <input id="ct-pg" type="number" min="1" value="1" onchange="Editor.goToPage(this.value)" />
+          / <span id="ct-total">—</span>
+        </div>
+      </div>
+
+      <!-- Mobile canvas bar -->
+      <div id="mob-canvas-bar">
+        <button class="ct-btn" data-tool-btn="select" onclick="Editor.setTool('select')">🖱️</button>
+        <button class="ct-btn" data-tool-btn="text"   onclick="Editor.setTool('text')">📝</button>
+        <button class="ct-btn" data-tool-btn="draw"   onclick="Editor.setTool('draw')">✏️</button>
+        <button class="ct-btn" data-tool-btn="highlight" onclick="Editor.setTool('highlight')">🖍️</button>
+        <button class="ct-btn" data-tool-btn="erase"  onclick="Editor.setTool('erase')">🧹</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0"></div>
+        <input type="color" id="mob-ct-color" value="#ff0000" style="width:26px;height:22px;border:none;background:none;cursor:pointer;padding:0;flex-shrink:0" />
+        <button class="ct-btn" onclick="Editor.zoom(-0.2)">−</button>
+        <button class="ct-btn" onclick="Editor.zoom(0.2)">+</button>
+        <button class="ct-btn" onclick="Editor.download()">⬇</button>
+      </div>
+
+      <!-- Empty state / drop zone -->
+      <div id="empty-state">
+        <div class="empty-drop" id="main-drop">
+          <input type="file" accept=".pdf" id="main-drop-input" />
+          <div class="drop-icon">📂</div>
+          <h2>Drop your PDF here</h2>
+          <p>or click to browse · Instant real-time editing</p>
+        </div>
+        <div class="quick-tools">
+          <button class="qt-btn" onclick="activateTool('merge')">🔗 Merge PDFs</button>
+          <button class="qt-btn" onclick="activateTool('split')">✂️ Split PDF</button>
+          <button class="qt-btn" onclick="activateTool('compress')">📦 Compress</button>
+          <button class="qt-btn" onclick="activateTool('sign')">✍️ Sign</button>
+          <button class="qt-btn" onclick="activateTool('ocr')">🔍 Extract Text</button>
+          <button class="qt-btn" onclick="activateTool('convert')">🔁 Convert</button>
+        </div>
+      </div>
+
+      <!-- PDF Canvas (hidden until PDF loaded) -->
+      <div id="canvas-area" style="display:none"></div>
+
+    </div><!-- /editor-area -->
+
+    <!-- ── Options Panel (Desktop right) ── -->
+    <div id="options-panel" class="hidden">
+      <div id="opt-panel"><!-- injected by JS --></div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- ── Mobile Bottom Nav ── -->
+  <div id="mob-nav">
+    <button class="mn-btn active" id="mn-home" onclick="mobSheet('tools')"><span class="mn-icon">🏠</span>Tools</button>
+    <button class="mn-btn" onclick="triggerFileOpen()"><span class="mn-icon">📂</span>Open</button>
+    <button class="mn-btn" onclick="Editor.download()"><span class="mn-icon">⬇️</span>Download</button>
+    <button class="mn-btn" onclick="mobSheet('kf')"><span class="mn-icon">🔗</span>KestFord</button>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ── Mobile Sheet ── -->
+<div id="mob-sheet">
+  <div class="mob-sheet-bg" onclick="closeMobSheet()"></div>
+  <div class="mob-sheet-panel">
+    <div class="mob-sheet-handle"></div>
+    <div class="mob-sheet-head">
+      <h3 id="mob-sheet-title">Tools</h3>
+      <button class="mob-sheet-close" onclick="closeMobSheet()">×</button>
+    </div>
+    <div class="mob-sheet-body" id="mob-sheet-body"></div>
+  </div>
+</div>
+
+<!-- ── Toast ── -->
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   App Bootstrap & Navigation
+   ═══════════════════════════════════════════ */
+
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Auto-detect view mode
+const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 860;
+let currentViewMode = isMobile ? 'mobile' : 'desktop';
+let currentTool = null;
+
+function showApp(toolId) {
+  document.getElementById('landing').classList.remove('visible');
+  document.getElementById('app').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setViewMode(currentViewMode);
+  if (toolId) activateTool(toolId);
+}
+
+function showLanding() {
+  document.getElementById('landing').classList.add('visible');
+  document.getElementById('app').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function openTool(toolId) { showApp(toolId); }
+
+// Initialize: landing is visible by default, app is hidden
+document.getElementById('app').style.display = 'none';
+
+/* ── View Mode ──────────────────────────────── */
+function setViewMode(mode) {
+  currentViewMode = mode;
+  document.body.classList.remove('mobile-view', 'desktop-view');
+  document.body.classList.add(mode + '-view');
+  document.getElementById('vt-mobile').classList.toggle('active', mode === 'mobile');
+  document.getElementById('vt-desktop').classList.toggle('active', mode === 'desktop');
+}
+
+/* ── Tool Activation ────────────────────────── */
+function activateTool(toolId) {
+  currentTool = toolId;
+
+  // Update sidebar highlights
+  document.querySelectorAll('[data-tool-id]').forEach(b =>
+    b.classList.toggle('active', b.dataset.toolId === toolId)
+  );
+
+  const panel = ToolPanels[toolId];
+  if (!panel) {
+    // Annotation/viewer — just set editor tool
+    if (toolId === 'annotate') Editor.setTool('draw');
+    else if (toolId === 'viewer') Editor.setTool('select');
+    document.getElementById('options-panel').classList.add('hidden');
+    return;
+  }
+
+  // Inject panel HTML
+  const optPanel = document.getElementById('opt-panel');
+  optPanel.innerHTML = panel.html;
+
+  // Show options panel
+  document.getElementById('options-panel').classList.remove('hidden');
+
+  // Initialize tool logic
+  panel.init();
+
+  // On mobile: show in sheet
+  if (currentViewMode === 'mobile') {
+    const body = document.getElementById('mob-sheet-body');
+    document.getElementById('mob-sheet-title').textContent = panel.label;
+    body.innerHTML = panel.html;
+    document.getElementById('mob-sheet').classList.add('open');
+    panel.init(); // re-init for mobile DOM
+  }
+}
+
+/* ── Mobile Sheet ───────────────────────────── */
+function mobSheet(type) {
+  const sheet = document.getElementById('mob-sheet');
+  const title = document.getElementById('mob-sheet-title');
+  const body  = document.getElementById('mob-sheet-body');
+
+  if (type === 'tools') {
+    title.textContent = 'PDF Tools';
+    body.innerHTML = `<div class="mob-tools-grid" id="mob-tools-grid"></div>`;
+    const grid = document.getElementById('mob-tools-grid');
+    const allTools = [
+      ['viewer','📄','Viewer'],['annotate','✏️','Annotate'],
+      ['merge','🔗','Merge'],['split','✂️','Split'],
+      ['compress','📦','Compress'],['convert','🔁','Convert'],
+      ['rotate','🔄','Rotate'],['reorder','↕️','Reorder'],
+      ['delete','🗑️','Delete'],['crop','🔲','Crop'],
+      ['pagenums','🔢','Pg Nums'],['header','📌','Header'],
+      ['forms','📝','Forms'],['sign','✍️','Sign'],
+      ['ocr','🔍','Extract'],['ai','🤖','AI'],
+      ['compare','🔎','Compare'],['watermark','💧','Watermark'],
+      ['password','🔒','Password'],['redact','⬛','Redact'],
+      ['metadata','📋','Metadata'],
+    ];
+    allTools.forEach(([id, icon, label]) => {
+      const btn = document.createElement('button');
+      btn.className = 'mob-tool-btn';
+      btn.innerHTML = `<span class="mt-icon">${icon}</span>${label}`;
+      btn.onclick = () => { closeMobSheet(); activateTool(id); };
+      grid.appendChild(btn);
+    });
+  } else if (type === 'kf') {
+    title.textContent = 'KestFord Agency';
+    body.innerHTML = `
+      <div style="text-align:center;padding:12px 0">
+        <img src="../logo.png" alt="KestFord" style="height:48px;margin-bottom:12px" onerror="this.style.display='none'" />
+        <h3 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px">KestFord Agency</h3>
+        <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:18px">Premium web design, graphic design, digital marketing, cyber security and business growth services for serious brands.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;text-align:left">
+          ${['Web Design','Graphic Design','Digital Marketing','Cyber Security','Performance Marketing','Business Growth'].map(s=>`<div style="display:flex;align-items:center;gap:6px;font-size:12.5px"><span style="color:var(--blue);font-weight:700">✓</span>${s}</div>`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px">
+          ${[['120+','Projects'],['98%','Satisfaction'],['6yr','Experience']].map(([n,l])=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--blue-l)">${n}</div><div style="font-size:10px;color:var(--muted)">${l}</div></div>`).join('')}
+        </div>
+        <a href="https://www.kestford.com" target="_blank" rel="noopener" style="display:block;background:var(--blue);color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:9px">Visit KestFord.com →</a>
+        <a href="mailto:hello@kestford.com" style="display:block;margin-top:8px;color:var(--muted);font-size:12px">hello@kestford.com</a>
+      </div>`;
+  }
+  sheet.classList.add('open');
+}
+
+function closeMobSheet() {
+  document.getElementById('mob-sheet').classList.remove('open');
+}
+
+/* ── File Opening ────────────────────────────── */
+function triggerFileOpen() {
+  const inp = document.getElementById('tb-file-input');
+  inp.click();
+}
+
+// Wire up all file inputs
+document.addEventListener('DOMContentLoaded', () => {
+  Editor.init();
+
+  const handleFile = (file) => { if (file) Editor.loadFile(file); };
+
+  document.getElementById('tb-file-input').onchange = e => handleFile(e.target.files[0]);
+  document.getElementById('main-drop-input').onchange = e => handleFile(e.target.files[0]);
+
+  // Drag-drop on main drop zone
+  const dropEl = document.getElementById('main-drop');
+  dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('over'); });
+  dropEl.addEventListener('dragleave', () => dropEl.classList.remove('over'));
+  dropEl.addEventListener('drop', e => { e.preventDefault(); dropEl.classList.remove('over'); handleFile(e.dataTransfer.files[0]); });
+
+  // Global drag-drop on canvas area
+  document.getElementById('canvas-area').addEventListener('dragover', e => e.preventDefault());
+  document.getElementById('canvas-area').addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
+
+  // Color + size inputs sync to editor
+  document.getElementById('ct-color').oninput = e => {
+    Editor.state.drawColor = e.target.value;
+    Editor.state.textColor = e.target.value;
+    Editor.state.highlightColor = e.target.value;
+  };
+  document.getElementById('mob-ct-color').oninput = e => {
+    Editor.state.drawColor = e.target.value;
+    Editor.state.textColor = e.target.value;
+  };
+  document.getElementById('ct-size').oninput = e => Editor.state.drawSize = parseInt(e.target.value);
+  document.getElementById('ct-fontsize').oninput = e => Editor.state.fontSize = parseInt(e.target.value);
+
+  // Zoom display sync
+  const origZoom = Editor.zoom.bind(Editor);
+  // Keyboard shortcuts for tools
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const map = { 'v':'select','t':'text','d':'draw','h':'highlight','e':'erase','z':'erase' };
+    if (map[e.key]) Editor.setTool(map[e.key]);
+  });
+
+  // Fix logo visibility
+  const img = document.getElementById('tb-logo-img');
+  img.onerror = () => { img.style.display='none'; document.getElementById('tb-logo-badge').style.display='flex'; };
+
+  // Auto-detect mobile
+  setViewMode(currentViewMode);
+
+  // Resize listener
+  window.addEventListener('resize', () => {
+    if (window.innerWidth < 860 && currentViewMode !== 'mobile') {
+      setViewMode('mobile');
+    }
+  });
+});
+
+/* ── Undo ───────────────────────────────────── */
+function undoLast() {
+  const pg = Editor.currentPage || 1;
+  Editor.undoAnnotation(pg);
+  Toast.show('↩ Undone');
+}
+</script>
+
+<script src="js/editor.js"></script>
+<script src="js/tools.js"></script>
+</body>
+</html>
