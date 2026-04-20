@@ -1,0 +1,9 @@
+{
+  "name": "kestford-airdrop",
+  "version": "3.0.0",
+  "private": true,
+  "description": "KestFord Airdrop with Vercel serverless signaling, nearby discovery, and direct browser to browser transfer.",
+  "scripts": {
+    "test": "node tests/endpoints.test.js && node tests/syntax-check.js"
+  }
+}
