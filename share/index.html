@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KestFord Share</title>
+  <meta name="description" content="Direct browser to browser file transfer with session codes, nearby discovery, and a Vercel ready signaling backend." />
+  <meta name="theme-color" content="#07090F" />
+  <meta property="og:title" content="KestFord Share" />
+  <meta property="og:description" content="Direct browser to browser file transfer with real signaling and nearby sender discovery." />
+  <meta property="og:image" content="/images/og-card.svg" />
+  <link rel="icon" href="/svg/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+
+  <header class="site-header">
+    <div class="wrap nav-row">
+      <a href="#top" class="brand" aria-label="KestFord Share home">
+        <img src="/svg/logo-full.svg" alt="KestFord Share" class="brand-full" />
+        <img src="/svg/logo-mark.svg" alt="KestFord Share" class="brand-mark" />
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#app">Open App</a>
+      </nav>
+      <button class="btn btn-primary btn-sm" id="launch-app-btn">Launch App</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="eyebrow">WebRTC file transfer</div>
+      <h1>Send files directly between browsers.</h1>
+      <p class="hero-copy">
+        Real 6 character session codes, real signaling APIs, nearby sender discovery for the same network, and direct browser to browser transfer.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-open-tab="send">Send Files</button>
+        <button class="btn btn-secondary" data-open-tab="receive">Receive Files</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>WebRTC</strong><span>Direct channel</span></div>
+        <div class="stat"><strong>Nearby</strong><span>Same network senders</span></div>
+        <div class="stat"><strong>Vercel</strong><span>Serverless backend</span></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="features">
+      <div class="section-tag">Features</div>
+      <h2>Built for a logical real flow</h2>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon" data-icon="shield"></div>
+          <h3>Session code pairing</h3>
+          <p>Sender creates a secure code. Receiver joins with that code. The signaling backend handles the handshake.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" data-icon="nearby"></div>
+          <h3>Nearby sender discovery</h3>
+          <p>Receivers can see senders on the same network hash and connect without manually typing the code.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" data-icon="server"></div>
+          <h3>TURN ready configuration</h3>
+          <p>The app supports STUN by default and reads TURN credentials from environment variables for harder networks.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wrap" id="how">
+      <div class="section-tag">How it works</div>
+      <h2>Three short steps</h2>
+      <div class="steps">
+        <article class="step-card"><span>01</span><h3>Create or find a session</h3><p>Sender selects files and creates a session. Receiver can join by code or from nearby senders.</p></article>
+        <article class="step-card"><span>02</span><h3>Exchange WebRTC signaling</h3><p>Offer, answer, and ICE candidates move through the API so the peers can establish a connection.</p></article>
+        <article class="step-card"><span>03</span><h3>Transfer files</h3><p>Once the data channel opens, files stream directly to the receiver and download links appear automatically.</p></article>
+      </div>
+    </section>
+
+    <section class="section wrap app-shell" id="app">
+      <div class="panel-head">
+        <div>
+          <div class="section-tag">Live app</div>
+          <h2>Share console</h2>
+        </div>
+        <div class="health-stack">
+          <div class="health-badge" id="health-badge">Checking backend…</div>
+          <div class="mini-note" id="network-badge">Checking network helpers…</div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Share tabs">
+        <button class="tab active" data-tab="send" role="tab" aria-selected="true">Send</button>
+        <button class="tab" data-tab="receive" role="tab" aria-selected="false">Receive</button>
+      </div>
+
+      <section class="tab-panel active" id="panel-send" role="tabpanel">
+        <div class="app-grid">
+          <div class="card drop-card">
+            <div class="card-title">Files to send</div>
+            <label class="field-label" for="sender-name-input">Sender name</label>
+            <input class="text-input" id="sender-name-input" type="text" maxlength="40" placeholder="Sender device" />
+            <label class="drop-zone" id="drop-zone">
+              <input id="file-input" type="file" multiple hidden />
+              <div class="drop-illustration" data-icon="folder"></div>
+              <h3>Drop files here</h3>
+              <p>Tap or drag files into this area.</p>
+              <span class="btn btn-secondary btn-inline">Browse Files</span>
+            </label>
+            <div class="file-list" id="send-file-list"></div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-title">Session</div>
+              <div class="code-display" id="send-code-display">------</div>
+              <div class="code-meta" id="send-code-meta">Create a session to generate a code.</div>
+              <div class="code-actions compact-actions">
+                <button class="btn btn-primary btn-block" id="create-session-btn">Create Session</button>
+                <button class="btn btn-secondary btn-block" id="copy-code-btn" disabled>Copy Code</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Nearby visibility</div>
+              <div class="toggle-row">
+                <label class="toggle-label" for="nearby-toggle">Visible to nearby receivers</label>
+                <input id="nearby-toggle" type="checkbox" checked />
+              </div>
+              <p class="muted" id="nearby-meta">No sender session yet.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Connection</div>
+              <ul class="status-list" id="send-status-list"></ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Transfer</div>
+              <div class="progress-box">
+                <div class="progress-row"><span>Overall progress</span><strong id="send-progress-text">0%</strong></div>
+                <div class="progress-bar"><div id="send-progress-bar"></div></div>
+                <p class="muted" id="send-transfer-detail">Choose files and create a session.</p>
+              </div>
+              <div class="action-row">
+                <button class="btn btn-primary btn-block" id="start-transfer-btn" disabled>Start Transfer</button>
+                <button class="btn btn-secondary btn-block" id="sender-reset-btn">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="panel-receive" role="tabpanel">
+        <div class="app-grid receive-grid">
+          <div class="stack">
+            <div class="card">
+              <div class="card-title">Join with code</div>
+              <label class="field-label" for="receiver-name-input">Receiver name</label>
+              <input class="text-input" id="receiver-name-input" type="text" maxlength="40" placeholder="Receiver device" />
+              <label class="field-label" for="receive-code-input">Enter sender code</label>
+              <input class="code-input" id="receive-code-input" type="text" maxlength="6" placeholder="KF7X3P" autocomplete="off" />
+              <div class="receive-actions">
+                <button class="btn btn-primary btn-block" id="join-session-btn">Connect</button>
+                <button class="btn btn-secondary btn-block" id="paste-code-btn">Paste</button>
+              </div>
+              <p class="muted">Connect with the code or use nearby senders below.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Nearby senders</div>
+              <div class="action-row inline-actions">
+                <button class="btn btn-secondary btn-inline" id="refresh-nearby-btn">Refresh</button>
+                <span class="mini-note" id="nearby-list-meta">Waiting for nearby senders.</span>
+              </div>
+              <div class="nearby-list" id="nearby-list"></div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-title">Connection</div>
+              <ul class="status-list" id="receive-status-list"></ul>
+            </div>
+            <div class="card">
+              <div class="card-title">Incoming files</div>
+              <div id="incoming-files" class="file-list compact"></div>
+              <div class="progress-box">
+                <div class="progress-row"><span>Overall progress</span><strong id="receive-progress-text">0%</strong></div>
+                <div class="progress-bar"><div id="receive-progress-bar"></div></div>
+                <p class="muted" id="receive-transfer-detail">No transfer yet.</p>
+              </div>
+              <div class="action-row">
+                <button class="btn btn-secondary btn-block" id="receiver-reset-btn">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="/js/app.js" defer></script>
+</body>
+</html>
