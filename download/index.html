@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KestFord Video Downloader — Free Online Video Downloader</title>
+<meta name="description" content="Download videos from TikTok, Instagram, Facebook, Twitter, Twitch, Reddit, SoundCloud and more — free, fast and direct. A free tool by KestFord."/>
+<meta name="author" content="KestFord"/>
+<link rel="canonical" href="https://download.kestford.com/"/>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090d;--surface:#0f1218;--surface2:#161b24;
+  --border:#1e2535;--border2:#263045;
+  --text:#f0f3f8;--muted:#5a6880;--muted2:#8898b0;
+  --accent:#e8a030;--accent2:#f0bc60;--red:#e8503a;--green:#3ae890;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;overflow-x:hidden;scroll-behavior:smooth}
+.bg-radial{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 1000px 500px at 50% -80px,rgba(232,160,48,.06) 0%,transparent 70%),
+             radial-gradient(ellipse 500px 400px at 90% 70%,rgba(232,160,48,.025) 0%,transparent 60%)}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.016) 59px,rgba(255,255,255,.016) 60px),
+                   repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.016) 59px,rgba(255,255,255,.016) 60px)}
+nav{position:sticky;top:0;z-index:100;background:rgba(7,9,13,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{height:34px;width:auto;display:block}
+.nav-logo-fallback{display:none;width:34px;height:34px;background:var(--accent);border-radius:8px;align-items:center;justify-content:center;font-family:'Clash Display',sans-serif;font-weight:700;font-size:.85rem;color:#07090d;flex-shrink:0}
+.nav-brand{font-family:'Clash Display',sans-serif;font-weight:700;font-size:1.1rem;color:var(--text);letter-spacing:-.01em}
+.nav-brand span{color:var(--accent)}
+.nav-breadcrumb{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted)}
+.nav-breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-breadcrumb a:hover{color:var(--accent)}
+.nav-sep{opacity:.4}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-link{font-size:.82rem;font-weight:600;color:var(--muted2);text-decoration:none;padding:6px 14px;border-radius:8px;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+.nav-link:hover{color:var(--text);border-color:var(--border2)}
+.nav-cta{font-size:.82rem;font-weight:600;color:#07090d;background:var(--accent);padding:7px 16px;border-radius:8px;text-decoration:none;transition:background .2s,transform .15s;white-space:nowrap}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+.page{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:56px 20px 80px}
+.hero{text-align:center;margin-bottom:44px;animation:fadeDown .6s ease both}
+.hero-eyebrow{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:rgba(232,160,48,.1);border:1px solid rgba(232,160,48,.2);padding:5px 14px;border-radius:999px;margin-bottom:18px}
+.hero-title{font-family:'Clash Display',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.08;letter-spacing:-.025em;margin-bottom:14px}
+.hero-title span{color:var(--accent)}
+.hero-sub{font-size:.95rem;color:var(--muted2);max-width:540px;margin:0 auto;line-height:1.6}
+.pbadges{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:32px;animation:fadeDown .6s .1s ease both;opacity:0;animation-fill-mode:forwards}
+.pb{display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;border:1px solid var(--border2);font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--muted);background:var(--surface)}
+.pb svg{width:15px;height:15px;display:block;opacity:.92}
+.main-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:28px;margin-bottom:16px;box-shadow:0 12px 60px rgba(0,0,0,.5);animation:fadeDown .6s .16s ease both;opacity:0;animation-fill-mode:forwards}
+.input-row{display:flex;gap:10px}
+.url-wrap{flex:1;position:relative}
+.url-input{width:100%;height:52px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;padding:0 16px 0 46px;font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
+.url-input::placeholder{color:var(--muted)}
+.url-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,160,48,.12)}
+.url-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;transition:color .2s}
+.url-input:focus~.url-icon{color:var(--accent)}
+.dl-btn{height:52px;padding:0 26px;background:var(--accent);color:#07090d;font-family:'Clash Display',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.02em;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;flex-shrink:0;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 20px rgba(232,160,48,.2)}
+.dl-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 28px rgba(232,160,48,.32)}
+.dl-btn:active{transform:translateY(0)}
+.dl-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.opts-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.opts-label{font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.08em;margin-right:2px}
+.qbtn{padding:5px 12px;border-radius:7px;font-size:.73rem;font-weight:600;border:1.5px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Instrument Sans',sans-serif}
+.qbtn:hover{border-color:var(--accent);color:var(--accent)}
+.qbtn.active{border-color:var(--accent);background:rgba(232,160,48,.1);color:var(--accent)}
+.divider{width:1px;height:18px;background:var(--border2);flex-shrink:0}
+.toggle-wrap{display:flex;align-items:center;gap:7px;cursor:pointer}
+.tog{position:relative;width:34px;height:18px}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;background:var(--border2);border-radius:999px;transition:background .2s}
+.tog input:checked~.tog-track{background:var(--accent)}
+.tog-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
+.tog input:checked~.tog-track~.tog-thumb{transform:translateX(16px)}
+.tog-label{font-size:.78rem;color:var(--muted);user-select:none}
+.status-box{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:22px 24px;display:none;margin-bottom:0;animation:slideUp .28s ease;overflow:hidden;position:relative}
+.status-box.show{display:block}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.loading-shell{position:relative;overflow:hidden}
+.loading-wm{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:122px;height:122px;opacity:.07;pointer-events:none}
+.loading-top{display:flex;align-items:flex-start;gap:14px;position:relative;z-index:1}
+.spinner{width:20px;height:20px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0;margin-top:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:.9rem;color:var(--muted2);line-height:1.45}
+.loading-text strong{font-family:'Clash Display',sans-serif;letter-spacing:.01em}
+.loading-url{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:440px}
+.progress-wrap{margin-top:16px;position:relative;z-index:1}
+.progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.progress-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.progress-num{font-size:.76rem;color:var(--accent);font-family:'Clash Display',sans-serif}
+.progress-bar{height:12px;border-radius:999px;background:linear-gradient(180deg,#121722,#0d1118);border:1px solid var(--border2);overflow:hidden;position:relative;box-shadow:inset 0 0 18px rgba(0,0,0,.38)}
+.progress-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 12px,transparent 12px 24px);pointer-events:none}
+.progress-fill{height:100%;width:1%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 0 20px rgba(232,160,48,.26);transition:width .18s ease}
+.progress-note{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted)}
+.err-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.err-icon-box{width:32px;height:32px;background:rgba(232,80,58,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.err-title{font-family:'Clash Display',sans-serif;font-size:.95rem;font-weight:600;color:var(--red)}
+.err-msg{font-size:.8rem;color:var(--muted);line-height:1.55;padding-left:42px}
+.succ-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.succ-icon-box{width:34px;height:34px;background:rgba(58,232,144,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.succ-title{font-family:'Clash Display',sans-serif;font-size:1rem;font-weight:700}
+.succ-platform{font-size:.72rem;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;margin-top:2px}
+.direct-btn{display:inline-flex;align-items:center;gap:9px;padding:12px 26px;border-radius:11px;background:var(--accent);color:#07090d;font-family:'Clash Display',sans-serif;font-weight:700;font-size:.95rem;text-decoration:none;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 20px rgba(232,160,48,.25)}
+.direct-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 28px rgba(232,160,48,.38)}
+.dl-filename{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:10px;word-break:break-all}
+.picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.picker-item{border:1.5px solid var(--border2);border-radius:11px;overflow:hidden;text-decoration:none;display:block;transition:border-color .2s,transform .15s}
+.picker-item:hover{border-color:var(--accent);transform:scale(1.03)}
+.picker-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface2);display:block}
+.picker-no-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);display:flex;align-items:center;justify-content:center}
+.picker-cap{padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted)}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:16px}
+.sup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:52px;animation:fadeDown .6s .28s ease both;opacity:0;animation-fill-mode:forwards}
+.sup-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 15px;display:flex;align-items:center;gap:11px;min-height:72px}
+.sup-logo{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sup-logo svg{width:20px;height:20px;display:block}
+.sup-name{font-size:.82rem;font-weight:600}
+.sup-sub{font-size:.68rem;color:var(--muted);margin-top:1px}
+.sup-disabled{opacity:.68}
+.ad-banner{background:linear-gradient(135deg,var(--surface) 0%,rgba(232,160,48,.04) 100%);border:1px solid rgba(232,160,48,.2);border-radius:16px;padding:28px 28px 24px;margin-bottom:48px;text-align:center;animation:fadeDown .6s .35s ease both;opacity:0;animation-fill-mode:forwards}
+.ad-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.ad-title{font-family:'Clash Display',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.ad-sub{font-size:.82rem;color:var(--muted2);line-height:1.55;max-width:440px;margin:0 auto 18px}
+.ad-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.ad-btn-primary{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:9px;background:var(--accent);color:#07090d;font-family:'Clash Display',sans-serif;font-weight:700;font-size:.88rem;text-decoration:none;transition:background .2s,transform .15s}
+.ad-btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.ad-btn-secondary{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:9px;border:1.5px solid rgba(232,160,48,.35);color:var(--accent);font-family:'Clash Display',sans-serif;font-weight:700;font-size:.88rem;text-decoration:none;transition:all .2s;background:transparent}
+.ad-btn-secondary:hover{border-color:var(--accent);background:rgba(232,160,48,.06)}
+footer{border-top:1px solid var(--border);padding-top:36px;animation:fadeDown .6s .4s ease both;opacity:0;animation-fill-mode:forwards}
+.footer-top{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;margin-bottom:28px}
+.footer-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.footer-logo img{height:30px;width:auto;display:block}
+.footer-logo-fallback{display:none;width:30px;height:30px;background:var(--accent);border-radius:7px;align-items:center;justify-content:center;font-family:'Clash Display',sans-serif;font-weight:700;font-size:.78rem;color:#07090d}
+.footer-brand-name{font-family:'Clash Display',sans-serif;font-weight:700;font-size:.95rem;color:var(--text)}
+.footer-brand-name span{color:var(--accent)}
+.footer-tagline{font-size:.75rem;color:var(--muted);margin-top:2px}
+.footer-links{display:flex;flex-wrap:wrap;gap:6px}
+.f-link{font-size:.78rem;font-weight:500;color:var(--muted);text-decoration:none;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);transition:all .2s}
+.f-link:hover{color:var(--text);border-color:var(--border2)}
+.f-link.primary{background:var(--accent);color:#07090d;border-color:transparent;font-weight:700;font-family:'Clash Display',sans-serif}
+.f-link.primary:hover{background:var(--accent2)}
+.footer-bottom{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--muted)}
+.footer-bottom a{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-bottom a:hover{color:var(--accent)}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.input-row{flex-direction:column}.dl-btn{width:100%;justify-content:center;height:48px}.nav-breadcrumb,.nav-link{display:none}.loading-url{max-width:100%}.progress-head{align-items:flex-start;flex-direction:column;gap:4px}.footer-bottom{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="bg-radial"></div>
+<div class="bg-grid"></div>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="https://www.kestford.com">
+      <img src="/logo.png" alt="KestFord" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="nav-logo-fallback">KF</div>
+      <div><div class="nav-brand">Kest<span>Ford</span></div></div>
+    </a>
+    <div class="nav-breadcrumb">
+      <a href="https://www.kestford.com">kestford.com</a>
+      <span class="nav-sep">/</span>
+      <span>download</span>
+    </div>
+    <div class="nav-right">
+      <a class="nav-link" href="https://www.kestford.com/#services">Services</a>
+      <a class="nav-cta" href="https://www.kestford.com/#contact">Start a Project</a>
+    </div>
+  </div>
+</nav>
+<div class="page">
+  <div class="hero">
+    <div class="hero-eyebrow">Free Tool by KestFord</div>
+    <h1 class="hero-title">Download Any Video<br/><span>Instantly</span></h1>
+    <p class="hero-sub">Paste a link from TikTok, Instagram, Facebook, Twitter, Reddit, Twitch, SoundCloud and more. YouTube is temporarily unavailable on this server.</p>
+  </div>
+  <div class="pbadges" id="pillBadges"></div>
+  <div class="main-card">
+    <div class="input-row">
+      <div class="url-wrap">
+        <input class="url-input" id="urlInput" type="url" placeholder="Paste video URL — Facebook, TikTok, Instagram…" autocomplete="off" spellcheck="false" inputmode="url"/>
+        <svg class="url-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      </div>
+      <button class="dl-btn" id="dlBtn" onclick="startDownload()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </button>
+    </div>
+    <div class="opts-row">
+      <span class="opts-label">Quality:</span>
+      <button class="qbtn" onclick="setQ(this,'max')">Max</button>
+      <button class="qbtn" onclick="setQ(this,'1080')">1080p</button>
+      <button class="qbtn active" onclick="setQ(this,'720')">720p</button>
+      <button class="qbtn" onclick="setQ(this,'480')">480p</button>
+      <button class="qbtn" onclick="setQ(this,'360')">360p</button>
+      <div class="divider"></div>
+      <label class="toggle-wrap">
+        <div class="tog">
+          <input type="checkbox" id="audioToggle"/>
+          <div class="tog-track"></div>
+          <div class="tog-thumb"></div>
+        </div>
+        <span class="tog-label">Audio only (MP3)</span>
+      </label>
+    </div>
+  </div>
+  <div class="status-box" id="statusBox"></div>
+  <iframe id="downloadFrame" name="downloadFrame" style="display:none" aria-hidden="true"></iframe>
+  <div style="margin-top:52px;margin-bottom:16px">
+    <div class="section-label">Supported Platforms</div>
+    <div class="sup-grid" id="supportedGrid"></div>
+  </div>
+  <div class="ad-banner">
+    <div class="ad-tag">Advertise Here</div>
+    <div class="ad-title">Reach Thousands of Daily Visitors</div>
+    <div class="ad-sub">Place your brand in front of a highly engaged audience every day. KestFord offers premium ad placements, sponsored banners, and digital marketing packages tailored to your goals.</div>
+    <div class="ad-actions">
+      <a class="ad-btn-primary" href="mailto:hello@kestford.com?subject=Advertising%20Enquiry%20%E2%80%94%20KestFord%20Downloader">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Us
+      </a>
+      <a class="ad-btn-secondary" href="https://www.kestford.com/#contact" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Get a Quote
+      </a>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <a class="footer-logo" href="https://www.kestford.com">
+        <img src="/logo.png" alt="KestFord" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="footer-logo-fallback">KF</div>
+        <div>
+          <div class="footer-brand-name">Kest<span>Ford</span></div>
+          <div class="footer-tagline">Web Design · Marketing · Cyber Security</div>
+        </div>
+      </a>
+      <div class="footer-links">
+        <a class="f-link primary" href="https://www.kestford.com" target="_blank" rel="noopener">Visit KestFord.com</a>
+        <a class="f-link" href="https://www.kestford.com/#services" target="_blank" rel="noopener">Services</a>
+        <a class="f-link" href="https://www.kestford.com/#contact" target="_blank" rel="noopener">Contact</a>
+        <a class="f-link" href="mailto:hello@kestford.com">hello@kestford.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© KestFord. All rights reserved. · <a href="https://download.kestford.com/">download.kestford.com</a></span>
+      <span>Powered by multi-provider fallback · Download responsibly</span>
+    </div>
+  </footer>
+</div>
+<script>
+const API = '/api/download';
+let selectedQ = '720';
+let loadingTimer = null;
+let loadingProgress = 1;
+
+const PLATFORM_META = {
+  youtube:{name:'YouTube',color:'#ff4545',sub:'Temporarily unavailable',disabled:true},
+  tiktok:{name:'TikTok',color:'#00e5cc',sub:'No watermark'},
+  instagram:{name:'Instagram',color:'#c850c0',sub:'Reels & Posts'},
+  facebook:{name:'Facebook',color:'#4d9fff',sub:'Public videos'},
+  twitter:{name:'Twitter / X',color:'#1d9bf0',sub:'Tweet videos'},
+  twitch:{name:'Twitch',color:'#9147ff',sub:'Clips & VODs'},
+  reddit:{name:'Reddit',color:'#ff4500',sub:'Video posts'},
+  soundcloud:{name:'SoundCloud',color:'#e8a030',sub:'Audio tracks'}
+};
+
+function iconSvg(key, color){
+  const c = color || '#fff';
+  const icons = {
+    youtube:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.2 7.1c-.2-1.1-1-1.9-2.1-2.2C17.1 4.4 12 4.4 12 4.4s-5.1 0-7.1.5C3.8 5.2 3 6 2.8 7.1 2.3 9.1 2.3 12 2.3 12s0 2.9.5 4.9c.2 1.1 1 1.9 2.1 2.2 2 .5 7.1.5 7.1.5s5.1 0 7.1-.5c1.1-.3 1.9-1.1 2.1-2.2.5-2 .5-4.9.5-4.9s0-2.9-.5-4.9Z" fill="${c}" fill-opacity=".95"/><path d="m10 15.5 5-3.5-5-3.5v7Z" fill="#07090d"/></svg>`,
+    tiktok:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.2 3v9.7a3.7 3.7 0 1 1-3-3.6V6.8a7 7 0 1 0 5.5 6.8V9.4c1 .7 2.2 1.2 3.5 1.4V7.7A4.9 4.9 0 0 1 17.1 6 4.8 4.8 0 0 1 15.6 3h-1.4Z" fill="${c}"/></svg>`,
+    instagram:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="4.5" stroke="${c}" stroke-width="2"/><circle cx="12" cy="12" r="3.6" stroke="${c}" stroke-width="2"/><circle cx="17.3" cy="6.8" r="1.1" fill="${c}"/></svg>`,
+    facebook:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.4 21v-8h2.7l.4-3h-3.1V8c0-.9.3-1.6 1.6-1.6H16.6V3.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H7.8v3h2.6v8h3Z" fill="${c}"/></svg>`,
+    twitter:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.9 3H22l-6.8 7.7L23 21h-6.2l-4.9-6.4L6.2 21H3l7.2-8.2L1 3h6.4l4.5 6 5-6Z" fill="${c}"/></svg>`,
+    twitch:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h15v10.2l-4 4H12l-2.4 2.3H7.4V17H5V3Zm2 2v10h2v1.8L11 15h4.2l2.8-2.8V5H7Zm4 2h2v4h-2V7Zm4 0h2v4h-2V7Z" fill="${c}"/></svg>`,
+    reddit:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="13" r="6.4" stroke="${c}" stroke-width="2"/><circle cx="9.5" cy="12.4" r="1" fill="${c}"/><circle cx="14.5" cy="12.4" r="1" fill="${c}"/><path d="M9 15.3c.8.6 1.8.9 3 .9s2.2-.3 3-.9" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="9.5" r="1.4" stroke="${c}" stroke-width="1.6"/><path d="M12.6 7.2 13.5 4l2.4.6" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/><path d="M8.2 9.5c1.1-.7 2.4-1 3.8-1 1.5 0 2.8.4 4 1" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+    soundcloud:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.4 8.6a4.7 4.7 0 0 1 8 2.5h.4a3.2 3.2 0 1 1 0 6.5H9.2a2.7 2.7 0 0 1-.8-5.3c.2-1.5.7-2.8 1-3.7Z" fill="${c}"/><path d="M5.2 9.5h1.2v8H5.2v-8Zm-2.2 2h1.2v6H3v-6Z" fill="${c}"/></svg>`,
+    video:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="6" width="11" height="12" rx="2" stroke="${c}" stroke-width="2"/><path d="m15 10 5-3v10l-5-3v-4Z" fill="${c}"/></svg>`
+  };
+  return icons[key] || icons.video;
+}
+
+function platformKeyFromUrl(url){
+  if (/youtube\.com|youtu\.be/i.test(url)) return 'youtube';
+  if (/tiktok\.com/i.test(url)) return 'tiktok';
+  if (/instagram\.com/i.test(url)) return 'instagram';
+  if (/facebook\.com|fb\.watch/i.test(url)) return 'facebook';
+  if (/twitter\.com|x\.com/i.test(url)) return 'twitter';
+  if (/twitch\.tv/i.test(url)) return 'twitch';
+  if (/reddit\.com/i.test(url)) return 'reddit';
+  if (/soundcloud\.com/i.test(url)) return 'soundcloud';
+  return 'video';
+}
+
+function detect(url){
+  const key = platformKeyFromUrl(url);
+  const meta = PLATFORM_META[key] || {name:'Video',color:'#e8a030',sub:'Media download'};
+  return {key,name:meta.name,color:meta.color,disabled:!!meta.disabled};
+}
+
+function renderStaticLists(){
+  const badgeOrder = ['youtube','tiktok','instagram','facebook','twitter','twitch'];
+  document.getElementById('pillBadges').innerHTML = badgeOrder.map((key)=>{
+    const item = PLATFORM_META[key];
+    return `<div class="pb">${iconSvg(key,item.color)}<span>${item.name}</span></div>`;
+  }).join('') + `<div class="pb">${iconSvg('video','#7c879b')}<span>+15 more</span></div>`;
+
+  const gridOrder = ['youtube','tiktok','instagram','facebook','twitter','twitch','reddit','soundcloud'];
+  document.getElementById('supportedGrid').innerHTML = gridOrder.map((key)=>{
+    const item = PLATFORM_META[key];
+    const extra = item.disabled ? ' sup-disabled' : '';
+    return `<div class="sup-card${extra}"><div class="sup-logo">${iconSvg(key,item.color)}</div><div><div class="sup-name">${item.name}</div><div class="sup-sub">${item.sub}</div></div></div>`;
+  }).join('');
+}
+
+function setQ(btn, q){
+  document.querySelectorAll('.qbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedQ = q;
+}
+
+function showStatus(html){
+  const b = document.getElementById('statusBox');
+  b.innerHTML = html;
+  b.classList.add('show');
+  b.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function clearLoadingTimer(finalValue){
+  if (loadingTimer) {
+    clearInterval(loadingTimer);
+    loadingTimer = null;
+  }
+  if (typeof finalValue === 'number') {
+    loadingProgress = finalValue;
+    const fill = document.getElementById('progressFill');
+    const num = document.getElementById('progressNum');
+    if (fill) fill.style.width = Math.max(1, Math.min(100, finalValue)) + '%';
+    if (num) num.textContent = Math.max(1, Math.min(100, finalValue)) + '%';
+  }
+}
+
+function startLoadingTimer(){
+  clearLoadingTimer();
+  loadingProgress = 1;
+  loadingTimer = setInterval(() => {
+    if (loadingProgress < 88) loadingProgress += 3;
+    else if (loadingProgress < 96) loadingProgress += 1;
+    const fill = document.getElementById('progressFill');
+    const num = document.getElementById('progressNum');
+    if (fill) fill.style.width = Math.max(1, Math.min(100, loadingProgress)) + '%';
+    if (num) num.textContent = Math.max(1, Math.min(100, loadingProgress)) + '%';
+  }, 190);
+}
+
+function buildSamePageDownloadUrl(dlUrl, filename){
+  const q = new URLSearchParams();
+  q.set('action', 'file');
+  q.set('u', encodeBase64UrlSafe(dlUrl));
+  q.set('f', filename || 'kestford-media');
+  return API + '?' + q.toString();
+}
+
+function triggerDownload(dlUrl, filename){
+  const frame = document.getElementById('downloadFrame');
+  if (!frame) return;
+  frame.src = buildSamePageDownloadUrl(dlUrl, filename);
+}
+
+const I_CHECK = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3ae890" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const I_DL = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+const I_ERR = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e8503a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+
+function prettyQualityLabel(q){ return String(q || '').toLowerCase() === 'max' ? 'Max quality' : `${q}p`; }
+function encodeBase64UrlSafe(str){ try { return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, ''); } catch (e) { return ''; } }
+function escapeHtml(str){ return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function showLoading(p, url){
+  showStatus(`<div class="loading-shell"><div class="loading-wm">${iconSvg(p.key, p.color)}</div><div class="loading-top"><div class="spinner"></div><div><div class="loading-text">Trying multiple download APIs for <strong style="color:${p.color}">${p.name}</strong>...</div><div class="loading-url">${escapeHtml(url)}</div></div></div><div class="progress-wrap"><div class="progress-head"><div class="progress-label">Completing download flow</div><div class="progress-num" id="progressNum">1%</div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div></div>`);
+  startLoadingTimer();
+}
+
+function renderMeta(data){
+  const bits = [];
+  if (data && data.provider) bits.push(`API: ${escapeHtml(data.provider)}`);
+  if (data && data.fallbackQuality) bits.push(`Used ${prettyQualityLabel(data.fallbackQuality)}`);
+  if (!bits.length) return '';
+  return `<div class="dl-filename" style="margin-top:12px">${bits.join(' · ')}</div>`;
+}
+function renderWarning(data){ if (!data || !data.warning) return ''; return `<div class="dl-filename" style="margin-top:10px;color:var(--accent)">${escapeHtml(data.warning)}</div>`; }
+
+function showSuccess(p, audio, data, fn){
+  clearLoadingTimer(100);
+  const effectiveQuality = data && data.fallbackQuality ? data.fallbackQuality : selectedQ;
+  const subtitle = audio ? 'MP3 Audio' : prettyQualityLabel(effectiveQuality);
+  showStatus(`<div><div class="succ-head"><div class="succ-icon-box">${I_CHECK}</div><div><div class="succ-title">Download started!</div><div class="succ-platform" style="color:${p.color}">${p.name} · ${escapeHtml(subtitle)}</div></div></div><a class="direct-btn" href="${escapeHtml(buildSamePageDownloadUrl(data.url, fn))}" download="${escapeHtml(fn)}" target="downloadFrame" rel="noopener">${I_DL} Download Again</a><div class="dl-filename">${escapeHtml(fn)}</div>${renderMeta(data)}${renderWarning(data)}</div>`);
+}
+
+function showPicker(p, data){
+  clearLoadingTimer(100);
+  const items = Array.isArray(data && data.picker) ? [...data.picker] : [];
+  if (data && data.audio) items.push({type:'audio', url:data.audio, thumb:'', label:'Audio'});
+  const cards = items.map((item, i) => {
+    const label = item.label || (item.type === 'photo' ? `Photo ${i+1}` : item.type === 'audio' ? `Audio ${i+1}` : `Video ${i+1}`);
+    const thumb = item.thumb ? `<img class="picker-thumb" src="${escapeHtml(item.thumb)}" alt="${escapeHtml(label)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="picker-no-thumb" style="display:none">${I_DL}</div>` : `<div class="picker-no-thumb">${I_DL}</div>`;
+    return `<a class="picker-item" href="${escapeHtml(buildSamePageDownloadUrl(item.url, label))}" download target="downloadFrame" rel="noopener">${thumb}<div class="picker-cap">${escapeHtml(label)}</div></a>`;
+  }).join('');
+  showStatus(`<div><div class="succ-head"><div class="succ-icon-box">${I_CHECK}</div><div><div class="succ-title">${items.length} file${items.length !== 1 ? 's' : ''} found</div><div class="succ-platform" style="color:${p.color}">${p.name} · tap a card to download</div></div></div><div class="picker-grid">${cards}</div>${renderMeta(data)}${renderWarning(data)}</div>`);
+}
+
+function showError(msg, detail){
+  clearLoadingTimer(100);
+  showStatus(`<div class="err-head"><div class="err-icon-box">${I_ERR}</div><div class="err-title">Download failed</div></div><div class="err-msg">${escapeHtml(msg)}${detail ? `<br/><br/><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem">${escapeHtml(detail)}</span>` : ''}</div>`);
+}
+
+function friendlyErr(code, message, data){
+  const c = String(code || '').toLowerCase();
+  if (/youtube_disabled/.test(c)) return 'YouTube is temporarily unavailable on this server. Please use another platform link.';
+  if (/link\.invalid|invalid_url/.test(c)) return 'This link is not valid. Paste a full public media URL.';
+  if (/link\.empty/.test(c)) return 'Please paste a media link first.';
+  if (/private/.test(c)) return 'This media is private and cannot be downloaded.';
+  if (/age|login/.test(c)) return 'This media is age-restricted or requires login.';
+  if (/too_long/.test(c)) return 'This media is too long for this downloader.';
+  if (/rate|limit|429/.test(c)) return 'Download APIs are busy right now. Please try again in a moment.';
+  if (/local_processing_required/.test(c)) return 'This media needs extra processing. Try Audio only or 360p.';
+  if (/instance_html|instance_invalid|unreachable/.test(c)) return 'All download APIs failed or were blocked by remote servers.';
+  if (/method_not_allowed/.test(c)) return 'Your hosting blocked the normal request. A fallback method was tried.';
+  if (message && !/provider returned an error/i.test(message)) return message;
+  if (/provider_error/.test(c) || /provider returned an error/i.test(message || '')) return 'Available download APIs rejected this link. Try another public link or a different Facebook post URL.';
+  if (data && Array.isArray(data.attemptedProviders) && data.attemptedProviders.length) return 'All download APIs failed for this request. Please try another link or lower quality.';
+  return 'Something went wrong. Please check the link and try again.';
+}
+
+function isJsonText(text){ const t = String(text || '').trim(); return t.startsWith('{') || t.startsWith('['); }
+async function apiCall(url, options){ const res = await fetch(url, options); const text = await res.text(); let data = null; if (isJsonText(text)) { try { data = JSON.parse(text); } catch (e) { data = null; } } return {res, text, data}; }
+function buildForm(url, audio){ const params = new URLSearchParams(); params.set('u', encodeBase64UrlSafe(url)); params.set('m', audio ? 'audio' : 'auto'); if (audio) params.set('a', 'mp3'); else params.set('q', selectedQ); return params; }
+function slimSnippet(text){ return String(text || '').replace(/\s+/g, ' ').trim().slice(0, 180); }
+function shouldTryGetFallback(result){ if (!result) return true; if (!result.data) { if (result.res.status === 405 || result.res.status === 403 || result.res.status === 400 || result.res.status === 0) return true; if (/^\s*</.test(result.text || '')) return true; return false; } const code = String(result.data?.error?.code || '').toLowerCase(); return /method_not_allowed|php_fatal/.test(code); }
+
+function finalizeFromData(p, audio, data){
+  if (!data || !data.status) { showError('The server returned invalid data.'); return; }
+  if (data.status === 'redirect' || data.status === 'tunnel' || data.status === 'stream') {
+    const fn = data.filename || data.audioFilename || `kestford-${p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.${audio ? 'mp3' : 'mp4'}`;
+    triggerDownload(data.url, fn);
+    showSuccess(p, audio, data, fn);
+    return;
+  }
+  if (data.status === 'picker') { showPicker(p, data); return; }
+  if (data.status === 'local-processing') { showError('This media needs extra processing. Try Audio only or 360p.'); return; }
+  if (data.status === 'error') {
+    const traceCount = Array.isArray(data.attemptedProviders) ? data.attemptedProviders.length : 0;
+    const detail = traceCount ? `${traceCount} provider attempts were made.` : '';
+    showError(friendlyErr(data.error && data.error.code, data.error && data.error.message, data), detail);
+    return;
+  }
+  showError('Unexpected server response.');
+}
+
+async function startDownload(){
+  const input = document.getElementById('urlInput');
+  const btn = document.getElementById('dlBtn');
+  const url = input.value.trim();
+  const audio = document.getElementById('audioToggle').checked;
+  if (!url) { showError('Please paste a media link first.'); return; }
+  const p = detect(url);
+  if (p.key === 'youtube') { showError('YouTube is temporarily unavailable on this server. Please use another platform link.'); return; }
+  const params = buildForm(url, audio);
+  btn.disabled = true;
+  showLoading(p, url);
+  try {
+    let result = null;
+    try {
+      result = await apiCall(API, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        body: params.toString()
+      });
+    } catch (e) {
+      result = null;
+    }
+    if (!result || shouldTryGetFallback(result)) {
+      const qp = new URLSearchParams(params);
+      qp.set('action', 'download');
+      result = await apiCall(API + '?' + qp.toString(), {method: 'GET'});
+    }
+    if (!result.data) {
+      const snippet = slimSnippet(result.text || '');
+      showError('Your hosting did not return JSON. This usually means PHP crashed or a security rule blocked the request.', `HTTP ${result.res && result.res.status ? result.res.status : 0} · ${(result.res && result.res.headers && result.res.headers.get('content-type')) || 'unknown content type'} · ${snippet}`);
+      return;
+    }
+    finalizeFromData(p, audio, result.data);
+  } catch (err) {
+    showError('Could not reach the download server.');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') startDownload(); });
+document.getElementById('urlInput').addEventListener('input', () => { document.getElementById('statusBox').classList.remove('show'); clearLoadingTimer(); });
+renderStaticLists();
+</script>
+</body>
+</html>
