@@ -1,0 +1,12 @@
+{
+  "name": "kestford-download",
+  "private": true,
+  "version": "1.0.0",
+  "description": "kestford download backend for vercel with youtube direct resolver and provider fallback",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "youtubei.js": "^15.0.1"
+  }
+}
