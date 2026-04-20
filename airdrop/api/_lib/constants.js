@@ -1,0 +1,3 @@
+export const SESSION_TTL_MS = 10 * 60 * 1000;
+export const MAX_FILE_BYTES = 4 * 1024 * 1024;
+export const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
