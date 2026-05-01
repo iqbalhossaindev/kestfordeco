@@ -69,6 +69,10 @@
     .app:nth-child(4) { animation-delay: .22s; }
     .app:nth-child(5) { animation-delay: .28s; }
     .app:nth-child(6) { animation-delay: .34s; }
+    .app:nth-child(7) { animation-delay: .40s; }
+    .app:nth-child(8) { animation-delay: .46s; }
+    .app:nth-child(9) { animation-delay: .52s; }
+    .app:nth-child(10) { animation-delay: .58s; }
 
     .icon {
       width: 64px;
@@ -219,6 +223,13 @@
     }
     .g-browser + .icon-glow { background: rgba(24,187,109,0.62); }
 
+    .g-hire-us {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(160deg, #8ee3ff 0%, #2aa7ff 46%, #0045b5 100%);
+    }
+    .g-hire-us + .icon-glow { background: rgba(42,167,255,0.64); }
+
     .g-tv {
       background:
         radial-gradient(circle at 30% 24%, rgba(255,255,255,0.22), transparent 30%),
@@ -239,6 +250,34 @@
         linear-gradient(160deg, #ff6a91 0%, #db225a 46%, #6d0028 100%);
     }
     .g-news-bd + .icon-glow { background: rgba(219,34,90,0.65); }
+
+    .g-baby-ai {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(160deg, #ffd86f 0%, #ff9f43 46%, #ff5e57 100%);
+    }
+    .g-baby-ai + .icon-glow { background: rgba(255,149,72,0.66); }
+
+    .g-sign-ai {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(160deg, #79f2d0 0%, #20c997 46%, #0b7a60 100%);
+    }
+    .g-sign-ai + .icon-glow { background: rgba(32,201,151,0.64); }
+
+    .g-eq-monitor {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(160deg, #8ec5ff 0%, #4d7cff 46%, #2639b8 100%);
+    }
+    .g-eq-monitor + .icon-glow { background: rgba(78,117,255,0.66); }
+
+    .g-gift-card {
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.24), transparent 30%),
+        linear-gradient(160deg, #ff8dc9 0%, #e64980 46%, #7b1f5d 100%);
+    }
+    .g-gift-card + .icon-glow { background: rgba(230,73,128,0.64); }
 
     .ripple-dot {
       position: absolute;
@@ -394,6 +433,24 @@
 <body>
   <div class="icon-grid">
 
+    <div class="app" data-url="https://dev.kestford.com/" data-info-title="Hire Us" data-info-text="Start your project with KestFord and connect directly for development and digital services.">
+      <div class="icon g-hire-us">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="7" width="14" height="12" rx="2.2" fill="rgba(255,255,255,0.14)" stroke="white" stroke-width="1.8"/>
+          <path d="M9 7V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8V7" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M5 11.2h14" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M10.2 14.2h3.6" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Hire Us</span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">Hire Us</span>
+        <span class="app-info-text">Start your project with KestFord and connect directly for development and digital services.</span>
+      </div>
+    </div>
+
     <div class="app" data-url="https://download.kestford.com/">
       <div class="icon g-download">
         <span class="icon-ring"></span>
@@ -419,25 +476,6 @@
       </div>
       <span class="icon-glow"></span>
       <span class="label">PDF Editor</span>
-    </div>
-
-    <div class="app" data-url="https://www.kestford.com" data-info-title="KestFord Main Site" data-info-text="Visit the main KestFord website to explore updates, services, and more.">
-      <div class="icon g-browser">
-        <span class="icon-ring"></span>
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
-          <path d="M12 3c-2.4 2.7-3.8 5.7-3.8 9s1.4 6.3 3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M12 3c2.4 2.7 3.8 5.7 3.8 9s-1.4 6.3-3.8 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="3" y1="9" x2="21" y2="9" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="3" y1="15" x2="21" y2="15" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="icon-glow"></span>
-      <span class="label">KestFord<small>Main Site</small></span>
-      <div class="app-info" role="status" aria-live="polite">
-        <span class="app-info-title">KestFord Main Site</span>
-        <span class="app-info-text">Visit the main KestFord website to explore updates, services, and more.</span>
-      </div>
     </div>
 
     <div class="app" data-url="https://watch.kestford.com">
@@ -486,6 +524,82 @@
       </div>
       <span class="icon-glow"></span>
       <span class="label">News<small>Bangla</small></span>
+    </div>
+
+    <div class="app" data-url="https://babyai.kestford.com/" data-info-title="Baby AI Learning" data-info-text="Interactive baby learning activities, calming support, and early-stage educational experiences.">
+      <div class="icon g-baby-ai">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="10" r="4.2" stroke="white" stroke-width="1.8"/>
+          <path d="M9.6 9.6h.01M14.4 9.6h.01" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M10 12.4c.55.45 1.18.68 2 .68s1.45-.23 2-.68" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M6.5 19c1.5-2.4 3.28-3.6 5.5-3.6s4 1.2 5.5 3.6" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M9.2 5.5 12 3l2.8 2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Baby AI<small>Learning</small></span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">Baby AI Learning</span>
+        <span class="app-info-text">Interactive baby learning activities, calming support, and early-stage educational experiences.</span>
+      </div>
+    </div>
+
+    <div class="app" data-url="https://signai.kestford.com/" data-info-title="Sign Language AI" data-info-text="AI-powered sign language tools focused on accessible communication and translation support.">
+      <div class="icon g-sign-ai">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M9.3 12.6V6.9a1.3 1.3 0 0 1 2.6 0v3.7" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M11.9 10.1V5.7a1.3 1.3 0 1 1 2.6 0v5.2" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M14.5 11V7.6a1.25 1.25 0 1 1 2.5 0V13.2" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M9.3 10.8 7.8 9.7a1.25 1.25 0 0 0-1.9 1.4l1.1 3c1.1 3 3.6 5 6.8 5h1.6c2.9 0 5.2-2.3 5.2-5.2V11.7a1.2 1.2 0 1 0-2.4 0v1.9" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Sign Language<small>AI</small></span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">Sign Language AI</span>
+        <span class="app-info-text">AI-powered sign language tools focused on accessible communication and translation support.</span>
+      </div>
+    </div>
+
+    <div class="app" data-url="https://eq.kestford.com/" data-info-title="Equalizer Monitor" data-info-text="Real-time equalizer visuals and sound monitoring tools in a clean monitoring interface.">
+      <div class="icon g-eq-monitor">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <line x1="6" y1="5" x2="6" y2="19" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="12" y1="5" x2="12" y2="19" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="18" y1="5" x2="18" y2="19" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <rect x="4.2" y="8.2" width="3.6" height="3.6" rx="1.2" fill="white" opacity=".92"/>
+          <rect x="10.2" y="12.4" width="3.6" height="3.6" rx="1.2" fill="white" opacity=".92"/>
+          <rect x="16.2" y="6.4" width="3.6" height="3.6" rx="1.2" fill="white" opacity=".92"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Equalizer<small>Monitor</small></span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">Equalizer Monitor</span>
+        <span class="app-info-text">Real-time equalizer visuals and sound monitoring tools in a clean monitoring interface.</span>
+      </div>
+    </div>
+
+    <div class="app" data-url="https://gift.kestford.com/" data-info-title="Gift Card Shop" data-info-text="Browse and access gift card shopping tools with a dedicated storefront experience.">
+      <div class="icon g-gift-card">
+        <span class="icon-ring"></span>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="4" y="8.5" width="16" height="10.5" rx="2" fill="rgba(255,255,255,0.12)" stroke="white" stroke-width="1.8"/>
+          <path d="M4 12.5h16" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M12 8.5v10.5" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M12 8.5h-2.2a1.9 1.9 0 1 1 0-3.8c1.6 0 2.2 1.5 2.2 3.8Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M12 8.5h2.2a1.9 1.9 0 1 0 0-3.8c-1.6 0-2.2 1.5-2.2 3.8Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="icon-glow"></span>
+      <span class="label">Gift Card<small>Shop</small></span>
+      <div class="app-info" role="status" aria-live="polite">
+        <span class="app-info-title">Gift Card Shop</span>
+        <span class="app-info-text">Browse and access gift card shopping tools with a dedicated storefront experience.</span>
+      </div>
     </div>
 
   </div>
